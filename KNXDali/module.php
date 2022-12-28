@@ -1,3 +1,4 @@
+<?
 // Klassendefinition
 class KNXDali extends IPSModule {
     // Überschreibt die interne IPS_Create($id) Funktion
@@ -21,3 +22,5 @@ class KNXDali extends IPSModule {
         // Selbsterstellter Code
     }
 }
+
+?>
