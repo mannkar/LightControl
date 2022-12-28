@@ -3,21 +3,97 @@
         "type": "SelectVariable",
         "name": "PointOfLight",
         "caption": "Point of Light"
-    }, {
-        "type": "List",
-        "name": "Variables",
-        "caption": "Variables",
-        "add": true,
-        "delete": true,
-        "columns": [{
-            "label": "VariableID",
-            "name": "ID",
-            "width": "auto",
-            "add": 0,
-            "edit": {
-                "type": "SelectVariable"
-            }
-        }],
-        "values": []
-    }]
+    }, 
+    {
+        "type":  "ExpansionPanel", "caption": "Change of Night and Day",
+        "items": [
+          {
+            "type":  "ExpansionPanel", "caption": "Time Schedule",
+            "items": [
+              {"type": "SelectEvent", "name": "WeeklyTimeTableEventID", "caption": "Weekly Timetable Event ID"},
+              {
+                "type":  "ExpansionPanel", "caption": "Consider Holiday (optional)",
+                "items": [
+                  {
+                    "type": "RowLayout", "items": [
+                    {"type": "SelectVariable", "name": "HolidayIndicatorID", "caption": "Holiday Indicator ID", "onChange": "IPS_RequestAction($id, 'HolidayIndicatorID', $HolidayIndicatorID);"},
+                    {
+                      "type": "Select", "name": "DayUsedWhenHoliday", "caption": "Used Weekday when Holiday", "options": [
+                      {"caption": "- not used -", "value": 0},
+                      {"caption": "Monday", "value": 1},
+                      {"caption": "Tuesday", "value": 2},
+                      {"caption": "Wednesday", "value": 3},
+                      {"caption": "Thursday", "value": 4},
+                      {"caption": "Friday", "value": 5},
+                      {"caption": "Saturday", "value": 6},
+                      {"caption": "Sunday", "value": 7}
+                    ]
+                    }
+                  ]
+                  }
+                ]
+              },
+              {
+                "type":  "ExpansionPanel", "caption": "Overruling Up and Down Times (optional)",
+                "items": [
+                  {
+                    "type": "RowLayout", "items": [
+                    {"type": "SelectVariable", "name": "WakeUpTimeID", "caption": "Wake-Up Time ID", "onChange": "IPS_RequestAction($id,'WakeUpTimeID',$WakeUpTimeID);"},
+                    {"type": "NumberSpinner", "name": "WakeUpTimeOffset", "caption": "Wake-Up Time Offset", "suffix": "Minutes"}
+                  ]
+                  },
+                  {
+                    "type": "RowLayout", "items": [
+                    {"type": "SelectVariable", "name": "BedTimeID", "caption": "Bedtime ID", "onChange": "IPS_RequestAction($id,'BedTimeID',$BedTimeID);"},
+                    {"type": "NumberSpinner", "name": "BedTimeOffset", "caption": "Bedtime Offset", "suffix": "Minutes"}
+                  ]
+                  }
+                ]
+              },
+              {
+                "type": "RowLayout", "items": [
+                {"type": "CheckBox", "name": "ActivatedIndividualNightLevels", "caption": "The blind should not be closed completely at night.", "onChange": "IPS_RequestAction($id,'ActivatedIndividualNightLevels',$ActivatedIndividualNightLevels);"},
+                {"type": "NumberSpinner", "name": "NightBlindLevel", "caption": "Blind Level", "digits": "2"},
+                {"type": "NumberSpinner", "name": "NightSlatsLevel", "caption": "Slats Level", "digits": "2"}
+              ]
+              },
+              {
+                "type": "RowLayout", "items": [
+                {"type": "CheckBox", "name": "ActivatedIndividualDayLevels", "caption": "The blind should not be opened completely at day.", "onChange": "IPS_RequestAction($id,'ActivatedIndividualDayLevels',$ActivatedIndividualDayLevels);"},
+                {"type": "NumberSpinner", "name": "DayBlindLevel", "caption": "Blind Level", "digits": "2"},
+                {"type": "NumberSpinner", "name": "DaySlatsLevel", "caption": "Slats Level", "digits": "2"}
+              ]
+              }
+            ]
+          },
+          {
+            "type":  "ExpansionPanel", "caption": "Is Day Detection (optional)",
+            "items": [
+              {"type": "SelectVariable", "name": "IsDayIndicatorID", "caption": "Is Day Indicator ID"},
+              {"type": "Label", "caption": "If no 'Is Day' indicator is set, the day is determined by the brightness:"},
+              {
+                "type": "RowLayout", "items": [
+                {"type": "SelectVariable", "name": "BrightnessID", "caption": "Brightness ID", "onChange": "IPS_RequestAction($id,'BrightnessID',$BrightnessID);"},
+                {"type": "NumberSpinner", "name": "BrightnessAvgMinutes", "caption": "Average of the last minutes", "suffix": "Minutes", "minimum": 0},
+                {"type": "SelectVariable", "name": "BrightnessThresholdID", "caption": "Brightness Threshold ID"}
+              ]
+              },
+              {"type": "Label", "caption": "The determined Day Start and/or End Time can also be overridden"},
+              {
+                "type":  "RowLayout", "caption": "Overruling Day Start and/or End Time (optional)",
+                "items": [
+                  {"type": "SelectVariable", "name": "DayStartID", "caption": "Start of the day ID"},
+                  {"type": "SelectVariable", "name": "DayEndID", "caption": "End of the day ID"}
+                ]
+              }
+            ]
+          },
+          {
+            "type": "RowLayout", "items": [
+            {"type": "NumberSpinner", "name": "DelayTimeDayNightChange", "caption": "Delay Time of Day Night Change", "suffix": "Seconds", "minimum": 0},
+            {"type": "CheckBox", "name": "DelayTimeDayNightChangeIsRandomly", "caption": "Delay Time of Day Night Change is randomly"}
+          ]
+          }
+        ]
+      }]
 }
