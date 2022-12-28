@@ -1,5 +1,5 @@
 // Klassendefinition
-class KNX-Dali extends IPSModule {
+class KNXDali extends IPSModule {
     // Überschreibt die interne IPS_Create($id) Funktion
     public function Create() {
         // Diese Zeile nicht löschen.
