@@ -11,5 +11,21 @@
             { "label": "Average", "value": 4 },
             { "label": "Count", "value": 5 }
         ]
-    }
+    }, {
+        "type": "List",
+        "name": "Variables",
+        "caption": "Variables",
+        "add": true,
+        "delete": true,
+        "columns": [{
+            "label": "VariableID",
+            "name": "ID",
+            "width": "auto",
+            "add": 0,
+            "edit": {
+                "type": "SelectVariable"
+            }
+        }],
+        "values": []
+    }]
 }
