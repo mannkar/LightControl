@@ -1,0 +1,15 @@
+{
+    "id": "{4CE0F1A7-2B82-C104-8CD8-6AA669E534CF}",
+    "name": "KNX-Dali",
+    "type": 3,
+    "vendor": "",
+    "aliases":
+    [
+        "LightControl-K"
+    ],
+    "url": "https://github.com/mannkar/LightControl",
+    "parentRequirements": [],
+    "childRequirements": [],
+    "implemented": [],
+    "prefix": "LCK"
+}
