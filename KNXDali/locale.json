@@ -3,8 +3,8 @@
         "de": {
             "Point of Light": "Lichtpunkt",
             "Primary Trigger": "Primäre Trigger",
-            "Sum": "Summe",
-            "Minimum": "Minimum",
+            "Secondary Trigger": "Sekundäre Trigger",
+            "Presence detector": "Präsenzmelder",
             "Maximum": "Maximum",
             "Average": "Durchschnitt",
             "Count": "Anzahl",
