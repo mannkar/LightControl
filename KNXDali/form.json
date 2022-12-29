@@ -55,5 +55,11 @@
                 }]
             }
         ]
-      }]
+    },
+    {
+        "type":  "ExpansionPanel", "caption": "Secondary Trigger",
+        "items": [
+
+        ]
+    }]
 }
