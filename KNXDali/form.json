@@ -5,7 +5,7 @@
         "caption": "Point of Light"
     }, 
     {
-        "type":  "ExpansionPanel", "caption": "Change of Night and Day",
+        "type":  "ExpansionPanel", "caption": "Primary Trigger",
         "items": [
           {
             "type":  "ExpansionPanel", "caption": "Time Schedule",
