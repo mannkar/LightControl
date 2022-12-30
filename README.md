@@ -15,10 +15,13 @@ Steuert einen Lichtpunkt nach vorgegebenen Einstellungen.
 5. [Konfiguration](#5-konfiguration)  
 6. [Statusvariablen und Profile](#6-statusvariablen-und-profile)  
 7. [Anhang](#7-anhang)
-    1. [GUIDs der Module](#guids-der-module)
-    2. [Spenden](#spenden)
+    1. [GUIDs der Module](#guids-der-modul(e))
 
 ## 1. Funktionsumfang
+
+Durch die Vewendung eines an KNX gekoppelten Dali Systems ergaben sich viele einzelnd zu steuernde Lichtpunkte in der Wohneinheit. Da die grundsätzliche Steuerung durch Präsenzmelder realisiert werden sollte, standen dadurch vielfältige Möglichkeiten einer sehr feinen Ansteuerung der einzelnen Lichtpunkte zur verfügung. Grundsätzlich sollte zwar soviel Logik wie Möglich in dem autarken KNX System implementiert werden, allerdings schien der Aufwand an Hardware (Logikmodule, Zeitschaltuhren,..) überprpportinal hoch.
+
+Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der mit seinem BlindControl Modul nicht nur meine Anforderungen an eine Rolladensteuerung teilweise übertroffen hat, sondern mit dem Code seines Modules auch an vielen Stelle "Pate" stand da es etliche Überschneidungen in den Logikanforderungen gab.
 
 - 1 Dalitreiber wird geschaltet
 - 1-4 auslösende PM auf Hauptprogramm
@@ -41,7 +44,7 @@ Steuert einen Lichtpunkt nach vorgegebenen Einstellungen.
 
 ## 5. Konfiguration
 
-### 5.1 Überprüfen, ob der zu steuernde Rollladen korrekt in IP-Symcon eingerichtet ist
+### 5.1 Überprüfen, ob der zu steuernde Lichtpunkt korrekt in IP-Symcon eingerichtet ist
 
 ### 5.2 Einrichtung des Wochenplans
 
@@ -49,15 +52,11 @@ Steuert einen Lichtpunkt nach vorgegebenen Einstellungen.
 
 #### 5.3.1 Übersteuernde Tagesanfang- und Endezeiten (optional)
 
-### 5.4 Beschattung (optional)
-
-#### 5.4.1 Beschattung nach Sonnenstand (optional)
-
-### 5.4.2 Beschattung nach Helligkeit (optional)
+### 5.4 Licht nach Helligket (optional)
 
 ### 5.5 Erkennung von Kontakten (optional)
 
-### 5.6 Blind Controller
+### 5.6 Light Controller
 
 ## 6. Statusvariablen und Profile
 
@@ -67,8 +66,8 @@ Folgende Statusvariablen werden angelegt:
 Über die Statusvariable kann die automatische Steuerung aktiviert und deaktiviert werden. Beim (Wieder-)Einschalten der automatischen Steuerung werden vorher erkannte manuelle Eingriffe verworfen.
  
 #####LAST_MESSAGE
-Die Statusvariable beinhaltet einen Hinweis über die letzte Bewegung. Um die Bewegungen eines Rollladens zu kontrollieren, bietet es sich an, die Archivierung für diese Variable einzuschalten. 
-Dann werden im Webfront die Bewegungen in Form eines Logfiles dargestellt.  
+Die Statusvariable beinhaltet einen Hinweis über die letzte Schaltung. Um die Schaltungen eines Lichpunktes zu kontrollieren, bietet es sich an, die Archivierung für diese Variable einzuschalten. 
+Dann werden im Webfront die Schaltereignisse in Form eines Logfiles dargestellt.  
 
 ## 7. Anhang
 
