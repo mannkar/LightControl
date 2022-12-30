@@ -1,27 +1,43 @@
 {
     "elements": [{
         "type": "SelectVariable",
-        "name": "PointOfLight",
-        "caption": "Point of Light"
-    }, 
+        "name": "PointOfLightOn",
+        "caption": "Point of Light On"
+    },
+    {
+        "type": "Label",
+        "caption": "Variable of type bool (0=off):"
+    },
+    {
+        "type": "SelectVariable",
+        "name": "PointOfLightOff",
+        "caption": "Point of Light off (optional)"
+    },
     {
         "type":  "ExpansionPanel", "caption": "Primary Trigger",
         "items": [
             {
                 "type": "List",
-                "name": "Devices1",
+                "name": "PrimTrigger",
                 "caption": "Presence detector",
                 "rowCount": 1,
                 "add": true,
                 "delete": true,
                 "columns": [{
-                    "caption": "InstanceID",
-                    "name": "InstanceID", 
+                    "caption": "Trigger ID",
+                    "name": "TriggerID", 
                     "width": "175px",
                     "add": 0,
                     "edit": {
-                        "type": "SelectInstance"
+                        "type": "SelectVariable"
                     }
+                },
+                {
+                    "caption": "Trigger name",
+                    "name": "TriggerName", 
+                    "width": "175px",
+                    "add": ""
+                    }   
                 }],
                 "values": [{
                     "InstanceID": 12435

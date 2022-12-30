@@ -1,15 +1,12 @@
 {
     "translations": {
         "de": {
-            "Point of Light": "Lichtpunkt",
+            "Point of Light on": "Lichtpunkt an",
+            "Point of Light off (optional)": "Lichtpunkt aus (optional)",
             "Primary Trigger": "Primäre Trigger",
             "Secondary Trigger": "Sekundäre Trigger",
             "Presence detector": "Präsenzmelder",
-            "Claudi": "Claudia Hofmann",
-            "Average": "Durchschnitt",
-            "Count": "Anzahl",
-            "Variables": "Variablen",
-            "VariableID": "VariablenID"
+            "Variable of type bool (0=off):": "Variable vom Typ bool (0=aus)"
         }
     }
 }
