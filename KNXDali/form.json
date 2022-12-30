@@ -35,10 +35,9 @@
                 {
                     "caption": "Trigger name",
                     "name": "TriggerName", 
-                    "width": "175px",
+                    "width": "auto",
                     "add": ""
-                    }   
-                }],
+                    }],
                 "values": [{
                     "InstanceID": 12435
                 }]
