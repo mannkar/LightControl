@@ -20,7 +20,7 @@
                 "type": "List",
                 "name": "PrimTrigger",
                 "caption": "Presence detector",
-                "rowCount": 1,
+                "rowCount": 2,
                 "add": true,
                 "delete": true,
                 "columns": [{
