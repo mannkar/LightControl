@@ -1,4 +1,4 @@
-#Light Control
+# Light Control
 
 Modul für Symcon ab Version 6.3.
 
@@ -76,5 +76,5 @@ Dann werden im Webfront die Bewegungen in Form eines Logfiles dargestellt.
 
 |           Modul            |  Typ   |                  GUID                  |
 |:--------------------------:|:------:|:--------------------------------------:|
-|      Blind Controller      | Device | {538F6461-5410-4F4C-91D3-B39122152D56} |
-| Blind Control Group Master | Device | {1ACD8A0D-5385-6D05-9537-F24C9014FD02} |
+|      Blind Controller      | Device | {4CE0F1A7-2B82-C104-8CD8-6AA669E534CF} |
+| ...                        | Device | {...                                 } |
