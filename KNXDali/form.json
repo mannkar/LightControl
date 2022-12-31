@@ -62,5 +62,44 @@
                 "suffix": "%"
             }
         ]
+    },
+    {
+        "type":  "ExpansionPanel", "caption": "Dimm values",
+        "items": [
+            {
+                "type": "List",
+                "name": "PrimDimVal",
+                "caption": "primary dimm values",
+                "add": true,
+                "delete": true,
+                "rowCount": "4",
+                "columns": [{
+                    "caption": "switch ID",
+                    "name": "SwitchID", 
+                    "width": "auto"
+                },
+                {
+                    "caption": "switch name",
+                    "name": "SwitchName", 
+                    "width": "auto"
+                },
+                {
+                    "caption": "switch value",
+                    "name": "SwitchValue", 
+                    "width": "auto"
+                }],
+                "values": [{
+                    "SwitchID": 0,
+                    "SwitchName": "Nacht",
+                    "SwitchValue":10
+                }]
+            },
+            {
+                "type": "NumberSpinner",
+                "name": "SecDimVal",
+                "caption": "Secondary dim value",
+                "suffix": "%"
+            }
+        ]
     }]
 }
