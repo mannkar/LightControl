@@ -70,8 +70,6 @@
                 "type": "List",
                 "name": "PrimDimVal",
                 "caption": "primary dimm values",
-                "add": true,
-                "delete": true,
                 "rowCount": "4",
                 "columns": [{
                     "caption": "switch ID",
@@ -86,7 +84,10 @@
                 {
                     "caption": "switch value",
                     "name": "SwitchValue", 
-                    "width": "auto"
+                    "width": "auto",
+                    "edit": {
+                        "type": "NumberSpinner"
+                    }
                 }],
                 "values": [{
                     "SwitchID": 0,
@@ -94,17 +95,17 @@
                     "SwitchValue":10
                 },
                 {
-                    "SwitchID": 0,
+                    "SwitchID": 1,
                     "SwitchName": "Morgen",
                     "SwitchValue":20
                 },
                 {
-                    "SwitchID": 0,
+                    "SwitchID": 2,
                     "SwitchName": "Tag",
                     "SwitchValue":0
                 },
                 {
-                    "SwitchID": 0,
+                    "SwitchID": 3,
                     "SwitchName": "Abend",
                     "SwitchValue":20
                 }]
