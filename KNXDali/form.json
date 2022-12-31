@@ -54,6 +54,12 @@
                 "values": [{
                     "InstanceID": 12435
                 }]
+            },
+            {
+                "type": "NumberSpinner",
+                "name": "SecDimVal",
+                "caption": "Secondary dim value",
+                "suffix": "%"
             }
         ]
     }]
