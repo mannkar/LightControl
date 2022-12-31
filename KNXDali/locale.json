@@ -2,7 +2,7 @@
     "translations": {
         "de": {
             "Point of Light on": "Lichtpunkt an",
-            "Point of Light off (optional)": "Lichtpunkt aus (optional)",
+            "Point of Light off (optional, variable of type bool (0=off))": "Lichtpunkt aus (optional, Variable vom Typ bool (0=aus)):",
             "Primary Trigger": "Primäre Trigger",
             "Secondary Trigger": "Sekundäre Trigger",
             "Presence detector": "Präsenzmelder",

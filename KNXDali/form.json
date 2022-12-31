@@ -4,14 +4,10 @@
         "name": "PointOfLightOn",
         "caption": "Point of Light On"
     },
-    {
-        "type": "Label",
-        "caption": "Variable of type bool (0=off):"
-    },
-    {
+        {
         "type": "SelectVariable",
         "name": "PointOfLightOff",
-        "caption": "Point of Light off (optional)"
+        "caption": "Point of Light off (optional, variable of type bool (0=off))"
     },
     {
         "type":  "ExpansionPanel", "caption": "Primary Trigger",
