@@ -7,7 +7,7 @@ class KNXDali extends IPSModule {
         parent::Create();
 
         $this->RegisterPropertyInteger("PointOfLightDimm", 12345);
-        $this->RegisterPropertyInteger("PointOfLightOO", );
+        $this->RegisterPropertyInteger("PointOfLightOO", 0);
     }
     // Überschreibt die intere IPS_ApplyChanges($id) Funktion
     public function ApplyChanges() {
