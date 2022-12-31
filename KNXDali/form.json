@@ -92,6 +92,21 @@
                     "SwitchID": 0,
                     "SwitchName": "Nacht",
                     "SwitchValue":10
+                },
+                {
+                    "SwitchID": 0,
+                    "SwitchName": "Morgen",
+                    "SwitchValue":20
+                },
+                {
+                    "SwitchID": 0,
+                    "SwitchName": "Tag",
+                    "SwitchValue":0
+                },
+                {
+                    "SwitchID": 0,
+                    "SwitchName": "Abend",
+                    "SwitchValue":20
                 }]
             },
             {
