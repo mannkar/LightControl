@@ -22,7 +22,7 @@
                 "columns": [{
                     "caption": "Trigger ID",
                     "name": "TriggerID", 
-                    "width": "175px",
+                    "width": "auto",
                     "add": 0,
                     "edit": {
                         "type": "SelectVariable"
