@@ -16,7 +16,6 @@
                 "type": "List",
                 "name": "PrimTrigger",
                 "caption": "Presence detector",
-                "rowCount": 1,
                 "add": true,
                 "delete": true,
                 "columns": [{
