@@ -1,13 +1,13 @@
 {
     "elements": [{
         "type": "SelectVariable",
-        "name": "PointOfLightOn",
-        "caption": "Point of Light On"
+        "name": "PointOfLightDimm",
+        "caption": "Point of dimmable Light "
     },
         {
         "type": "SelectVariable",
-        "name": "PointOfLightOff",
-        "caption": "Point of Light off (optional, variable of type bool (0=off))"
+        "name": "PointOfLightOO",
+        "caption": "Point of Light on/off (optional)"
     },
     {
         "type":  "ExpansionPanel", "caption": "Primary Trigger",
