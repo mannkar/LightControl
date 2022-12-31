@@ -15,12 +15,12 @@
             {
                 "type": "List",
                 "name": "PrimTrigger",
-                "caption": "Presence detector",
+                "caption": "Primary presence detector",
                 "add": true,
                 "delete": true,
                 "columns": [{
-                    "caption": "Trigger ID",
-                    "name": "TriggerID", 
+                    "caption": "Prim. trigger ID",
+                    "name": "PrimTriggerID", 
                     "width": "auto",
                     "add": 0,
                     "edit": {
@@ -36,7 +36,25 @@
     {
         "type":  "ExpansionPanel", "caption": "Secondary Trigger",
         "items": [
-
+            {
+                "type": "List",
+                "name": "SecTrigger",
+                "caption": "Secondary presence detector",
+                "add": true,
+                "delete": true,
+                "columns": [{
+                    "caption": "Sec. trigger ID",
+                    "name": "SecTriggerID", 
+                    "width": "auto",
+                    "add": 0,
+                    "edit": {
+                        "type": "SelectVariable"
+                    }
+                }],
+                "values": [{
+                    "InstanceID": 12435
+                }]
+            }
         ]
     }]
 }
