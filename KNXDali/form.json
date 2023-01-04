@@ -66,19 +66,19 @@
                 "rowCount": "4",
                 "columns": [{
                     "caption": "switch ID",
-                    "name": "SwitchID", 
-                    "width": "20",
-                    "visible": "false"
+                    "name": "SwitchID",
+                    "visible": "false",
+                    "width": "20"
                 },
                 {
                     "caption": "switch name",
                     "name": "SwitchName", 
-                    "width": "150"
+                    "width": "300"
                 },
                 {
                     "caption": "switch value",
                     "name": "SwitchValue", 
-                    "width": "75",
+                    "width": "300",
                     "edit": {
                         "type": "NumberSpinner"
                     }
