@@ -26,9 +26,6 @@
                     "edit": {
                         "type": "SelectVariable"
                     }
-                }],
-                "values": [{
-                    "InstanceID": 12435
                 }]
             }
         ]
@@ -50,9 +47,6 @@
                     "edit": {
                         "type": "SelectVariable"
                     }
-                }],
-                "values": [{
-                    "InstanceID": 12435
                 }]
             }]
     },
