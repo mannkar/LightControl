@@ -54,6 +54,11 @@
         "type":  "ExpansionPanel", "caption": "Dimm values",
         "items": [
             {
+                "type": "SelectVariable",
+                "name": "WeeklyTimeTableEventID",
+                "caption": "Weekly Timetable Event ID"
+            },
+            {
                 "type": "List",
                 "name": "PrimDimVal",
                 "caption": "primary dimm values",
