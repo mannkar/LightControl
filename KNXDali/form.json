@@ -67,17 +67,18 @@
                 "columns": [{
                     "caption": "switch ID",
                     "name": "SwitchID", 
-                    "width": "auto"
+                    "width": "20",
+                    "visible": "false"
                 },
                 {
                     "caption": "switch name",
                     "name": "SwitchName", 
-                    "width": "auto"
+                    "width": "75"
                 },
                 {
                     "caption": "switch value",
                     "name": "SwitchValue", 
-                    "width": "auto",
+                    "width": "20",
                     "edit": {
                         "type": "NumberSpinner"
                     }
