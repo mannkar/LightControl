@@ -10,6 +10,12 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyInteger("PointOfLightOO", 0);
         $this->RegisterPropertyString("PrimTrigger", '[]');
         $this->RegisterPropertyString("SecTrigger", '[]');
+
+
+
+
+        $this->RegisterPropertyString("SecDimValue", 50);
+
     }
     // Überschreibt die intere IPS_ApplyChanges($id) Funktion
     public function ApplyChanges() {
