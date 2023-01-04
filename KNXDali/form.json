@@ -73,12 +73,12 @@
                 {
                     "caption": "switch name",
                     "name": "SwitchName", 
-                    "width": "75"
+                    "width": "150"
                 },
                 {
                     "caption": "switch value",
                     "name": "SwitchValue", 
-                    "width": "20",
+                    "width": "75",
                     "edit": {
                         "type": "NumberSpinner"
                     }
