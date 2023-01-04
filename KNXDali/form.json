@@ -120,6 +120,6 @@
         { "type": "ValidationTextBox", "name": "Message", "caption": "Message" },
         { "type": "Button", "label": "Send Message", "onClick": "SMS_Send($id, $Number, $Message);" },
         { "type": "Button", "label": "Read Balance", "onClick": "echo 'Balance: '.sprintf('%.2f', SMS_RequestBalance($id)).' credits';" },
-        { "type": "Button", "caption": "Show Configuration", "onClick": "echo IPS_GetObject($id)['ObjectName'] . ' (#' . $id . ')' . PHP_EOL . PHP_EOL; print_r(json_decode(IPS_GetConfiguration ($id), true));"},
+        { "type": "Button", "caption": "Show Configuration", "onClick": "echo IPS_GetObject($id)['ObjectName'] . ' (#' . $id . ')' . PHP_EOL . PHP_EOL; print_r(json_decode(IPS_GetConfiguration ($id), true));"}
     ]
 }
