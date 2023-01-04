@@ -115,6 +115,7 @@
 ],
 "actions":
     [
+        {"type": "TestCenter"},
         { "type": "ValidationTextBox", "name": "Number", "caption": "Number" },
         { "type": "ValidationTextBox", "name": "Message", "caption": "Message" },
         { "type": "Button", "label": "Send Message", "onClick": "SMS_Send($id, $Number, $Message);" },
