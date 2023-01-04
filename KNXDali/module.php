@@ -14,7 +14,7 @@ class KNXDali extends IPSModule {
 
 
 
-        $this->RegisterPropertyString("SecDimVal    ", 50);
+        $this->RegisterPropertyString("SecDimVal", 50);
 
     }
     // Überschreibt die intere IPS_ApplyChanges($id) Funktion
