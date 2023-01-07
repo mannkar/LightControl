@@ -51,7 +51,7 @@
             }]
     },
     {
-        "type":  "ExpansionPanel", "caption": "Secondary Trigger",
+        "type":  "ExpansionPanel", "caption": "Time Schedule",
         "items": [
             {"type": "SelectEvent",
             "name": "WeeklyTimeTableEventID",
