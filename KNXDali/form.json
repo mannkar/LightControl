@@ -51,13 +51,61 @@
             }]
     },
     {
+        "type":  "ExpansionPanel", "caption": "Secondary Trigger",
+        "items": [
+            {"type": "SelectEvent",
+            "name": "WeeklyTimeTableEventID",
+            "caption": "Weekly Timetable Event ID"
+            },
+            {
+                "type":  "ExpansionPanel", "caption": "Consider Holiday (optional)",
+                "items": [
+                  {
+                    "type": "RowLayout", "items": [
+                    {"type": "SelectVariable", "name": "HolidayIndicatorID", "caption": "Holiday Indicator ID", "onChange": "IPS_RequestAction($id, 'HolidayIndicatorID', $HolidayIndicatorID);"},
+                    {
+                      "type": "Select", "name": "DayUsedWhenHoliday", "caption": "Used Weekday when Holiday", "options": [
+                      {"caption": "- not used -", "value": 0},
+                      {"caption": "Monday", "value": 1},
+                      {"caption": "Tuesday", "value": 2},
+                      {"caption": "Wednesday", "value": 3},
+                      {"caption": "Thursday", "value": 4},
+                      {"caption": "Friday", "value": 5},
+                      {"caption": "Saturday", "value": 6},
+                      {"caption": "Sunday", "value": 7}
+                    ]
+                    }
+                  ]
+                  }
+                ]
+              },
+              {
+                "type":  "ExpansionPanel", "caption": "Is Day Detection (optional)",
+                "items": [
+                  {"type": "SelectVariable", "name": "IsDayIndicatorID", "caption": "Is Day Indicator ID"},
+                  {"type": "Label", "caption": "If no 'Is Day' indicator is set, the day is determined by the brightness:"},
+                  {
+                    "type": "RowLayout", "items": [
+                    {"type": "SelectVariable", "name": "BrightnessID", "caption": "Brightness ID", "onChange": "IPS_RequestAction($id,'BrightnessID',$BrightnessID);"},
+                    {"type": "NumberSpinner", "name": "BrightnessAvgMinutes", "caption": "Average of the last minutes", "suffix": "Minutes", "minimum": 0},
+                    {"type": "SelectVariable", "name": "BrightnessThresholdID", "caption": "Brightness Threshold ID"}
+                  ]
+                  },
+                  {"type": "Label", "caption": "The determined Day Start and/or End Time can also be overridden"},
+                  {
+                    "type":  "RowLayout", "caption": "Overruling Day Start and/or End Time (optional)",
+                    "items": [
+                      {"type": "SelectVariable", "name": "DayStartID", "caption": "Start of the day ID"},
+                      {"type": "SelectVariable", "name": "DayEndID", "caption": "End of the day ID"}
+                    ]
+                  }
+                ]
+              }
+        ]
+    },
+    {
         "type":  "ExpansionPanel", "caption": "Dimm values",
         "items": [
-            {
-                "type": "SelectVariable",
-                "name": "WeeklyTimeTableEventID",
-                "caption": "Weekly Timetable Event ID"
-            },
             {
                 "type": "List",
                 "name": "PrimDimVal",
