@@ -8,7 +8,7 @@ class KNXDali extends IPSModule {
 
         $this->RegisterPropertyInteger("PointOfLightDimm", 12345);
         $this->RegisterPropertyInteger("PointOfLightOO", 0);
-        $this->RegisterPropertyString("PrimTrigger", '[]');
+        $this->RegisterPropertyString("PrimTrigger",.'[]');
         $this->RegisterPropertyString("SecTrigger", '[]');
         $this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
         $this->RegisterPropertyString("PrimDimVal", '[]');
@@ -25,7 +25,7 @@ class KNXDali extends IPSModule {
         $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
         $_vii = 1;
             foreach     ($variables as $variable){
-                echo $_vii;
+            //    echo $_vii;
             //CreateEvent($_vvalue, $_vii);
             $_vii++;
             
