@@ -22,7 +22,7 @@ class KNXDali extends IPSModule {
         // Diese Zeile nicht löschen
         parent::ApplyChanges();
 
-        //$variables = json_decode($this->ReadPropertyString('PrimTrigger'));
+        $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
         //$_vii = 1;
         //    foreach     ($variables as $variable){
             //    echo $_vii;
