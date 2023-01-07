@@ -2,7 +2,7 @@
     "elements": [{
         "type": "SelectVariable",
         "name": "PointOfLightDimm",
-        "caption": "Point of dimmable Light "
+        "caption": "Point of dimmable Light"
     },
         {
         "type": "SelectVariable",
@@ -19,7 +19,7 @@
                 "add": true,
                 "delete": true,
                 "columns": [{
-                    "caption": "Prim. trigger ID",
+                    "caption": "Primary trigger ID",
                     "name": "PrimTriggerID", 
                     "width": "auto",
                     "add": 0,
@@ -40,7 +40,7 @@
                 "add": true,
                 "delete": true,
                 "columns": [{
-                    "caption": "Sec. trigger ID",
+                    "caption": "Secondary trigger ID",
                     "name": "SecTriggerID", 
                     "width": "auto",
                     "add": 0,
@@ -62,7 +62,10 @@
                 "items": [
                   {
                     "type": "RowLayout", "items": [
-                    {"type": "SelectVariable", "name": "HolidayIndicatorID", "caption": "Holiday Indicator ID", "onChange": "IPS_RequestAction($id, 'HolidayIndicatorID', $HolidayIndicatorID);"},
+                    {"type": "SelectVariable",
+                    "name": "HolidayIndicatorID",
+                    "caption": "Holiday Indicator ID",
+                    "onChange": "IPS_RequestAction($id, 'HolidayIndicatorID', $HolidayIndicatorID);"},
                     {
                       "type": "Select", "name": "DayUsedWhenHoliday", "caption": "Used Weekday when Holiday", "options": [
                       {"caption": "- not used -", "value": 0},
@@ -154,7 +157,7 @@
             {
                 "type": "NumberSpinner",
                 "name": "SecDimVal",
-                "caption": "Secondary dim value",
+                "caption": "Secondary dim value [%]",
                 "suffix": "%"
             }
         ]

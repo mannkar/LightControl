@@ -1,12 +1,40 @@
 {
     "translations": {
         "de": {
-            "Point of Light on": "Lichtpunkt an",
-            "Point of Light off (optional, variable of type bool (0=off))": "Lichtpunkt aus (optional, Variable vom Typ bool (0=aus)):",
+            "Point of dimmable Light": "Lichtpunkt dimmbar",
+            "Point of Light on/off (optional)": "Lichtpunkt an/aus (optional)",
             "Primary Trigger": "Primäre Auslöser",
+            "Primary presence detector": "Primäre Präsenzmelder",
+            "Primary trigger ID": "Primäre Trigger ID",
             "Secondary Trigger": "Sekundäre Auslöser",
-            "Prim. presence detector": "Primäre Präsenzmelder",
-            "Variable of type bool (0=off):": "Variable vom Typ bool (0=aus)"
+            "Secondary presence detector": "Sekundäre Präsenzmelder",
+            "Secondary trigger ID": "Sekundäre Trigger ID",
+            "Time Schedule": "Wochenplan",
+            "Weekly Timetable Event ID": "Wochenplan Ereignis ID",
+            "Consider Holiday (optional)": "Berücksichtigung von Feier-/Urlaubstagen (optional)",
+            "Holiday Indicator ID": "Feier-/Urlaubstag ID",
+            "Used Weekday when Holiday": "zu nutzender Wochentag am Feier-/Urlaubstag",
+            "- not used -":"- nicht benutzt -",
+            "Monday":"Montag",
+            "Tuesday":"Dienstag",
+            "Wednesday":"Mittwoch",
+            "Thursday":"Donnerstag",
+            "Friday":"Freitag",
+            "Saturday":"Samstag",
+            "Sunday":"Sonntag",
+            "Is Day Detection (optional)": "'Ist es Tag' - Erkennung (optional)",
+            "Is Day Indicator ID": "'Ist es Tag' Indikator ID",
+            "If no 'Is Day' indicator is set, the day is determined by the brightness:": "Wenn kein 'Ist es Tag' Indikator angegeben ist, wird der Tag anhand der Helligkeit bestimmt:",
+            "Brightness ID":"Helligkeit ID",
+            "Average of the last minutes": "Durchschnitt der letzten Minuten nehmen",
+            "Brightness Threshold ID":"Grenzwert Helligkeit ID",
+
+
+            "Dimm values": "Dimmwerte",
+            "switch ID": "Schalt ID",
+            "switch name": "Schaltname",
+            "switch value": "Schaltwert",
+            "Secondary dim value [%]": "Sekundärer Schaltwert [%]"
         }
     }
 }
