@@ -23,11 +23,11 @@ class KNXDali extends IPSModule {
         parent::ApplyChanges();
 
         $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
-        //$_vii = 1;
+        $_vii = 1;
         //    foreach     ($variables as $variable){
-            //    echo $_vii;
+                   echo $_vii;
             //CreateEvent($_vvalue, $_vii);
-        //    $_vii++;
+            $_vii++;
             
 
         //    };
