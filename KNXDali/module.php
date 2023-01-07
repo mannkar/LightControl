@@ -14,8 +14,6 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyString("PrimDimVal", '[]');
 
 
-
-
         $this->RegisterPropertyInteger("SecDimVal", 50);
 
     }
