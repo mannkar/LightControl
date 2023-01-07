@@ -35,7 +35,10 @@
             "switch ID": "Schalt ID",
             "switch name": "Schaltname",
             "switch value": "Schaltwert",
-            "Secondary dim value [%]": "Sekundärer Schaltwert [%]"
+            "Secondary dim value [%]": "Sekundärer Schaltwert [%]",
+
+
+            "Show Configuration": "Zeige Konfiguration"
         }
     }
 }
