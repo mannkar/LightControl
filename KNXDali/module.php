@@ -21,6 +21,16 @@ class KNXDali extends IPSModule {
     public function ApplyChanges() {
         // Diese Zeile nicht löschen
         parent::ApplyChanges();
+
+        $_vii = 1;
+            foreach     (PrimTrigger as &$_vvalue){
+                echo $_vvalue;
+            //CreateEvent($_vvalue, $_vii);
+            $_vii++;
+            
+
+            };
+
     }
     /**
     * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
