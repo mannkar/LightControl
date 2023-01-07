@@ -8,7 +8,7 @@ class KNXDali extends IPSModule {
 
         $this->RegisterPropertyInteger("PointOfLightDimm", 12345);
         $this->RegisterPropertyInteger("PointOfLightOO", 0);
-        $this->RegisterPropertyString("PrimTrigger",.'[]');
+        $this->RegisterPropertyString("PrimTrigger",'[]');
         $this->RegisterPropertyString("SecTrigger", '[]');
         $this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
         $this->RegisterPropertyString("PrimDimVal", '[]');
