@@ -24,13 +24,14 @@ class KNXDali extends IPSModule {
         $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
         $_vii = 1;
             foreach     ($variables as $variable){
-                $eid = @IPS_GetObjectIDByIdent("SourceTrigger", $this->InstanceID); 
+                $eid = @IPS_GetObjectIDByIdent("PrimTrigger".$_vii, $this->InstanceID); 
                 if($eid === false) {
                     $eid = IPS_CreateEvent(0);
+                    IPS_SetParent($eid, $this->InstanceID);
+					IPS_SetIdent($eid, "PrimTrigger".$_vii);
                 }
             //CreateEvent($_vvalue, $_vii);
             $_vii++;
-            
 
             };
 
