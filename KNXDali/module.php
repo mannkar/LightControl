@@ -25,9 +25,8 @@ class KNXDali extends IPSModule {
         $_vii = 1;
             foreach     ($variables as $variable){
                 $eid = @IPS_GetObjectIDByIdent("SourceTrigger", $this->InstanceID); 
-                $eid = @IPS_GetObjectIDByIdent("SourceTrigger", $this->InstanceID);
-				if($eid === false) {
-                $eid = IPS_CreateEvent(0);
+                if($eid === false) {
+                    $eid = IPS_CreateEvent(0);
                 }
             //CreateEvent($_vvalue, $_vii);
             $_vii++;
