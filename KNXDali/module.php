@@ -31,7 +31,7 @@ class KNXDali extends IPSModule {
 					IPS_SetIdent($eid, "PrimTrigger".$_vii);
                     $str = $variable;
                     IPS_SetName($eid, "Trigger for # ..." ) ;
-                    IPS_SetInfo($eid, $variable);
+                    IPS_SetInfo($eid, $variables);
                 }
                 //IPS_SetEventTrigger($eid, 0, $this->ReadPropertyInteger("PrimTrigger"));
                 //IPS_SetEventScript($eid, "SetValue(IPS_GetObjectIDByIdent(\"Value\", \$_IPS['TARGET']), UMR_Calculate(\$_IPS['TARGET'], \$_IPS['VALUE']));");
