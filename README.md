@@ -23,7 +23,7 @@ Durch die Vewendung eines an KNX gekoppelten Dali Systems ergaben sich viele ein
 
 Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der mit seinem BlindControl Modul nicht nur meine Anforderungen an eine Rolladensteuerung teilweise übertroffen hat, sondern mit dem Code seines Modules auch an vielen Stelle "Pate" stand da es etliche Überschneidungen in den Logikanforderungen gab.
 
-- 1 Dalitreiber wird geschaltet
+- 1 Daliaddresse wird geschaltet
 - 1-4 auslösende PM auf Hauptprogramm
 - 1-4 auslösende PM auf Nebenprogram
 - Zeitschaltung von Nacht auf Morgen.
@@ -36,9 +36,18 @@ Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der
 - Geht aus, solbald kein NebenPM mehr an ist und kein HauptPM an ist.
 
 ## 2. Voraussetzungen
+IP Symcon 7.0 und später
+Der Lichtpunkt muss einen an/aus Schalter haben (boolean)
+UND der Lichtpunkt muss ein Dimmobjekt haben (integer 0-100 % )
+Die Auslösenden Variablen (Präsenzmelder) sind vom typ boolean
 
 
 ## 3. Installation
+
+Das Modul wird über den Modul Store installiert.
+
+Anlegen einer Lichtinstanz
+In Symcon an beliebiger Stelle Instanz hinzufügen auswählen und Light Controller auswählen. Es wird eine Lichtinstanz angelegt, in der die Eigenschaften zur Steuerung eines einzelnen Licht(punkt)es gesetzt werden.
 
 ## 4. Funktionsreferenz
 
