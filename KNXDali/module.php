@@ -11,6 +11,8 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyString("PrimTrigger",'[]');
         $this->RegisterPropertyString("SecTrigger", '[]');
         $this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
+        $this->RegisterPropertyIneger("HolidayIndicatorID",0);
+        $this->RegisterPropertyIneger("DayUsedWhenHoliday",0);
         $this->RegisterPropertyString("PrimDimVal", '[]');
         
         $this->RegisterPropertyInteger("SecDimVal", 50);
