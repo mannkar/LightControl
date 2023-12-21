@@ -41,7 +41,8 @@ class KNXDali extends IPSModule {
             }
         }
 
-        $PrimTriggers = json_decode($this->ReadPropertyString('PrimTriggers'));
+        //Register update messages and references
+        $PrimTriggers = json_decode($this->ReadPropertyString('PrimTriggers'), true);
         foreach ($PrimTriggers as $PrimTrigger) {
             $triggerID = $PrimTrigger['PrimTriggerIDs'];
             $this->RegisterMessage($triggerID, VM_UPDATE);
