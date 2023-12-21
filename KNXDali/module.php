@@ -17,7 +17,7 @@ class KNXDali extends IPSModule {
         
         $this->RegisterPropertyInteger("SecDimVal", 50);
 
-        
+
         $this->RegisterVariableBoolean('Active', $this->Translate('Active'), '~Switch');
         $this->EnableAction('Active');
     }
@@ -33,33 +33,26 @@ class KNXDali extends IPSModule {
         // Diese Zeile nicht löschen
         parent::ApplyChanges();
 
-        $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
-        $_vii = 1;
-            foreach     ($variables as $variable){
-                $eid = @IPS_GetObjectIDByIdent("PrimTrigger".$_vii, $this->InstanceID); 
-                if($eid === false) {
-                    $eid = IPS_CreateEvent(0);
-                    IPS_SetParent($eid, $this->InstanceID);
-					IPS_SetIdent($eid, "PrimTrigger".$_vii);
-                    $str = $variable;
-                    IPS_SetName($eid, "Trigger for # ..." ) ;
-                    IPS_SetInfo($eid, $variables);
-                }
-                //IPS_SetEventTrigger($eid, 0, $this->ReadPropertyInteger("PrimTrigger"));
-                //IPS_SetEventScript($eid, "SetValue(IPS_GetObjectIDByIdent(\"Value\", \$_IPS['TARGET']), UMR_Calculate(\$_IPS['TARGET'], \$_IPS['VALUE']));");
-                //IPS_SetEventActive($eid, true);
-            //CreateEvent($_vvalue, $_vii);
-            $_vii++;
+        //$variables = json_decode($this->ReadPropertyString('PrimTrigger'));
 
-            };
         
         //Add references
-        foreach ($this->GetReferenceList() as $referenceID) {
-            $this->UnregisterReference($referenceID);
-        }
-        if ($this->ReadPropertyInteger('SourceID') != 0) {
-            $this->RegisterReference($this->ReadPropertyInteger('SourceID'));
-        }
+        foreach ($this->GetReferenceList() as $referenceID)
+            {
+                $this->UnregisterReference($referenceID);
+            }
+        if ($this->ReadPropertyInteger('PointOfLightDimm') != 0)
+            {
+                $this->RegisterReference($this->ReadPropertyInteger('PointOfLightDimm'));
+            }
+        if ($this->ReadPropertyInteger('WeeklyTimeTableEventID') != 0)
+            {
+                $this->RegisterReference($this->ReadPropertyInteger('WeeklyTimeTableEventID'));
+            }
+        if ($this->ReadPropertyInteger('HolidayIndicatorID') != 0)
+            {
+                $this->RegisterReference($this->ReadPropertyInteger('HolidayIndicatorID'));
+            }
 
     }
     /**
