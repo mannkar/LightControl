@@ -65,6 +65,26 @@ class KNXDali extends IPSModule {
     public function MeineErsteEigeneFunktion() {
         // Selbsterstellter Code
     }
+
+    public function SetActive(bool $Active)
+    {
+        
+        //Modul aktivieren
+        SetValue($this->GetIDForIdent('Active'), $Active);
+        return true;
+    }
+
+    public function RequestAction($Ident, $Value)
+    {
+        switch ($Ident) {
+            case 'Active':
+                $this->SetActive($Value);
+                break;
+
+            default:
+                throw new Exception('Invalid Ident');
+        }
+    }
 }
 
 ?>
