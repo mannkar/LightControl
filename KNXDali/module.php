@@ -18,7 +18,16 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyInteger("SecDimVal", 50);
 
         
+        $this->RegisterVariableBoolean('Active', $this->Translate('Active'), '~Switch');
+        $this->EnableAction('Active');
     }
+
+    public function Destroy()
+    {
+        //Never delete this line!
+        parent::Destroy();
+    }
+
     // Überschreibt die intere IPS_ApplyChanges($id) Funktion
     public function ApplyChanges() {
         // Diese Zeile nicht löschen
@@ -43,6 +52,14 @@ class KNXDali extends IPSModule {
             $_vii++;
 
             };
+        
+        //Add references
+        foreach ($this->GetReferenceList() as $referenceID) {
+            $this->UnregisterReference($referenceID);
+        }
+        if ($this->ReadPropertyInteger('SourceID') != 0) {
+            $this->RegisterReference($this->ReadPropertyInteger('SourceID'));
+        }
 
     }
     /**

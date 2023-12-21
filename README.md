@@ -33,13 +33,16 @@ Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der
 - Aktionsschaltung von Morgen auf Tag (IstTag)
 - Aktionsschaltung von Tag auf Abend (IstTag)
 - Ein primärer Trigger dimmt die Lichtpunkte auf die zu dem Zeitpunkt definierte Dimmstufe
-- Ein sekundärer Trigger dimmt die Lichtpunkte auf einen reduzierten Wert der zu dem Zeipunkt geltenden Dimmstufe 
+- Ein sekundärer Trigger dimmt die Lichtpunkte auf einen reduzierten Wert der zu dem Zeipunkt geltenden Dimmstufe
+- Urlaubs- und Feiertagsberücksichtigung
+- Putzfunktion
 
 ![image](docs/Steuerkonzept.jpeg)
 Beispiel: Tagsüber soll die reguläre Dimmstärke eines Lichtpunktes 2% betragen. Für die sekundären Trigger ist ein Wert von 20% angegeben. Wird eine Bewegung innerhalb der sekundären Trigger von links oder rechts erkannt, wird der Lichtpunkt auf 20% von den 2% Sollwert gestellt. Das wären in diesem Fall 0,4% der Gesamtleuchtleistung. Da dies in der Regel kein einstellbarer Wert für den Dimmaktor ist, wird der reduzierte Wert immer aufgerundet, so dass dar Leuchtpunkt mit 1% angesteuert wird.
 Sobald ein primärer Trigger auslöst wird die Leuchte auf 2% gesetzt.
 
 Die Idee dahinter ist, dass man nie einen komplett unbeleuchteten Bereich betreten soll der erst wenn man sich in Ihm befindet angeschaltet wird.
+
 
 ## 2. Voraussetzungen
 IP Symcon 7.0 und später
