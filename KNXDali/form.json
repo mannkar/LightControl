@@ -111,7 +111,7 @@
         "items": [
             {
                 "type": "List",
-                "name": "PrimDimVal",
+                "name": "PrimDimVals",
                 "caption": "primary dimm values",
                 "rowCount": "4",
                 "columns": [{
