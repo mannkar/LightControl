@@ -19,21 +19,27 @@ Steuert einen Lichtpunkt nach vorgegebenen Einstellungen.
 
 ## 1. Funktionsumfang
 
-Durch die Vewendung eines an KNX gekoppelten Dali Systems ergaben sich viele einzelnd zu steuernde Lichtpunkte in der Wohneinheit. Da die grundsätzliche Steuerung durch Präsenzmelder realisiert werden sollte, standen dadurch vielfältige Möglichkeiten einer sehr feinen Ansteuerung der einzelnen Lichtpunkte zur verfügung. Grundsätzlich sollte zwar soviel Logik wie Möglich in dem autarken KNX System implementiert werden, allerdings schien der Aufwand an Hardware (Logikmodule, Zeitschaltuhren,..) überprpportinal hoch.
+Durch die Vewendung eines an KNX gekoppelten Dali Systems ergaben sich viele einzelnd zu steuernde, dimmbare Lichtpunkte. Da die grundsätzliche Steuerung durch Präsenzmelder (PM) realisiert werden sollte, standen dadurch vielfältige Möglichkeiten einer sehr feinen Ansteuerung der einzelnen Lichtpunkte zur Verfügung. Grundsätzlich sollte zwar soviel Logik wie Möglich in dem autarken KNX System implementiert werden, allerdings schien der Aufwand an Hardware (Logikmodule, Zeitschaltuhren,..) überprpportinal hoch.
 
 Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der mit seinem BlindControl Modul nicht nur meine Anforderungen an eine Rolladensteuerung teilweise übertroffen hat, sondern mit dem Code seines Modules auch an vielen Stelle "Pate" stand da es etliche Überschneidungen in den Logikanforderungen gab.
 
-- 1 Daliaddresse wird geschaltet
-- 1-4 auslösende PM auf Hauptprogramm
-- 1-4 auslösende PM auf Nebenprogram
+- Schalter zum aktivieren des Automatikmodus
+- 1-n Daliaddressen werden geschaltet
+- 1-n auslösende PM als "primäre Trigger"
+- 1-n auslösende PM als "sekundäre Trigger"
 - Zeitschaltung von Nacht auf Morgen.
 - Zeitschaltung von Tag auf Abend
 - Wenn bereits IstTag auf Tag oder Abend geschaltet hat, 
 - Aktionsschaltung von Morgen auf Tag (IstTag)
 - Aktionsschaltung von Tag auf Abend (IstTag)
-- Geht auf Nebenprogramm, sobald mindestens 1 NebenPM an geht und kein HauptPM an ist
-- Geht auf Hauptprogramm, sobald mindestens 1 HaupPM an geht.
-- Geht aus, solbald kein NebenPM mehr an ist und kein HauptPM an ist.
+- Ein primärer Trigger dimmt die Lichtpunkte auf die zu dem Zeitpunkt definierte Dimmstufe
+- Ein sekundärer Trigger dimmt die Lichtpunkte auf einen reduzierten Wert der zu dem Zeipunkt geltenden Dimmstufe 
+
+![image](docs/Steuerkonzept.jpeg)
+Beispiel: Tagsüber soll die reguläre Dimmstärke eines Lichtpunktes 2% betragen. Für die sekundären Trigger ist ein Wert von 20% angegeben. Wird eine Bewegung innerhalb der sekundären Trigger von links oder rechts erkannt, wird der Lichtpunkt auf 20% von den 2% Sollwert gestellt. Das wären in diesem Fall 0,4% der Gesamtleuchtleistung. Da dies in der Regel kein einstellbarer Wert für den Dimmaktor ist, wird der reduzierte Wert immer aufgerundet, so dass dar Leuchtpunkt mit 1% angesteuert wird.
+Sobald ein primärer Trigger auslöst wird die Leuchte auf 2% gesetzt.
+
+Die Idee dahinter ist, dass man nie einen komplett unbeleuchteten Bereich betreten soll der erst wenn man sich in Ihm befindet angeschaltet wird.
 
 ## 2. Voraussetzungen
 IP Symcon 7.0 und später
@@ -47,7 +53,7 @@ Die Auslösenden Variablen (Präsenzmelder) sind vom typ boolean
 Das Modul wird über den Modul Store installiert.
 
 Anlegen einer Lichtinstanz
-In Symcon an beliebiger Stelle Instanz hinzufügen auswählen und Light Controller auswählen. Es wird eine Lichtinstanz angelegt, in der die Eigenschaften zur Steuerung eines einzelnen Licht(punkt)es gesetzt werden.
+In Symcon an beliebiger Stelle Instanz hinzufügen auswählen und Light Controller auswählen. Es wird eine Lichtinstanz angelegt, in der die Eigenschaften zur Steuerung eines einzelnen oder mehrerer  Licht(punkt)es gesetzt werden.
 
 ## 4. Funktionsreferenz
 
@@ -84,5 +90,5 @@ Dann werden im Webfront die Schaltereignisse in Form eines Logfiles dargestellt.
 
 |           Modul            |  Typ   |                  GUID                  |
 |:--------------------------:|:------:|:--------------------------------------:|
-|      Blind Controller      | Device | {4CE0F1A7-2B82-C104-8CD8-6AA669E534CF} |
+|      Light Control         | Device | {610B80D7-5CFE-989E-AD6D-48EDE751ABDD} |
 | ...                        | Device | {...                                 } |
