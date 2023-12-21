@@ -10,17 +10,17 @@
         "caption": "Point of Light on/off (optional)"
     },
     {
-        "type":  "ExpansionPanel", "caption": "Primary Trigger",
+        "type":  "ExpansionPanel", "caption": "Primary Triggers",
         "items": [
             {
                 "type": "List",
-                "name": "PrimTrigger",
-                "caption": "Primary presence detector",
+                "name": "PrimTriggers",
+                "caption": "Primary presence detectors",
                 "add": true,
                 "delete": true,
                 "columns": [{
-                    "caption": "Primary trigger ID",
-                    "name": "PrimTriggerID", 
+                    "caption": "Primary trigger IDs",
+                    "name": "PrimTriggerIDs", 
                     "width": "auto",
                     "add": 0,
                     "edit": {
@@ -31,17 +31,17 @@
         ]
     },
     {
-        "type":  "ExpansionPanel", "caption": "Secondary Trigger",
+        "type":  "ExpansionPanel", "caption": "Secondary Triggers",
         "items": [
             {
                 "type": "List",
-                "name": "SecTrigger",
-                "caption": "Secondary presence detector",
+                "name": "SecTriggers",
+                "caption": "Secondary presence detectors",
                 "add": true,
                 "delete": true,
                 "columns": [{
-                    "caption": "Secondary trigger ID",
-                    "name": "SecTriggerID", 
+                    "caption": "Secondary trigger IDs",
+                    "name": "SecTriggerIDs", 
                     "width": "auto",
                     "add": 0,
                     "edit": {

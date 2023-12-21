@@ -8,7 +8,7 @@ class KNXDali extends IPSModule {
 
         $this->RegisterPropertyInteger("PointOfLightDimm", 12345);
         $this->RegisterPropertyInteger("PointOfLightOO", 0);
-        $this->RegisterPropertyString("PrimTrigger",'[]');
+        $this->RegisterPropertyString("PrimTriggers",'[]');
         $this->RegisterPropertyString("SecTrigger", '[]');
         $this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
         $this->RegisterPropertyInteger("HolidayIndicatorID",0);
@@ -41,15 +41,12 @@ class KNXDali extends IPSModule {
             }
         }
 
-        $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
-        $_vii = 0;
-            foreach     ($variables as $variable){
-                $this->RegisterMessage($variable, VM_UPDATE);
-                print_r ($variable ['PrimTriggerID']);
-            $_vii++;
-
-            };
-            echo $_vii;
+        $PrimTriggers = json_decode($this->ReadPropertyString('PrimTriggers'));
+        foreach ($PrimTriggers as $PrimTrigger) {
+            $triggerID = $PrimTrigger['VariableID'];
+            $this->RegisterMessage($triggerID, VM_UPDATE);
+            $this->RegisterReference($triggerID);
+        }
 
         //Add references
         foreach ($this->GetReferenceList() as $referenceID)
