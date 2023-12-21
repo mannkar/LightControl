@@ -44,7 +44,7 @@ class KNXDali extends IPSModule {
         $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
         $_vii = 0;
             foreach     ($variables as $variable){
-                $this->RegisterMessage($variable, VM_UPDATE);
+                $this->RegisterMessage($variable, 10603); //VM_UPDATE
             $_vii++;
 
             };
