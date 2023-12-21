@@ -33,9 +33,23 @@ class KNXDali extends IPSModule {
         // Diese Zeile nicht löschen
         parent::ApplyChanges();
 
-        //$variables = json_decode($this->ReadPropertyString('PrimTrigger'));
+               
+        //Unregister all messages in order to readd them
+        foreach ($this->GetMessageList() as $senderID => $messages) {
+            foreach ($messages as $message) {
+                $this->UnregisterMessage($senderID, $message);
+            }
+        }
 
-        
+        $variables = json_decode($this->ReadPropertyString('PrimTrigger'));
+        $_vii = 0;
+            foreach     ($variables as $variable){
+                $this->RegisterMessage($this->ReadPropertyInteger('variable'), VM_UPDATE);
+            $_vii++;
+
+            };
+            echo $_vii;
+
         //Add references
         foreach ($this->GetReferenceList() as $referenceID)
             {
