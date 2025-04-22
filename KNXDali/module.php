@@ -189,20 +189,23 @@ class KNXDali extends IPSModule {
         {
             case "off":
                 //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with OFF Message: ".$idDimm. " " . $Message.$Level);
-                SetValueInteger ($idDimm, 0);
+                //SetValueInteger ($idDimm, 0);
+                RequestAction ($idDimm, 0);
                 break;
             
             case "low":
                 $BaseLevel = $this -> CalculateDimmLevel();
-                //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level);
+                IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level);
                 $Lower = $this -> ReadPropertyInteger("SecDimVal");
-                SetValueInteger ($idDimm, $BaseLevel/100*$Lower);
+                //SetValueInteger ($idDimm, $BaseLevel/100*$Lower);
+                RequestAction ($idDimm, $BaseLevel/100*$Lower);
                 break;
 
             case "high":
                 $BaseLevel = $this -> CalculateDimmLevel();
-                //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level);
-                SetValueInteger ($idDimm, $BaseLevel);
+                IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level);
+                //SetValueInteger ($idDimm, $BaseLevel);
+                RequestAction ($idDimm, $BaseLevel);
                 break;
 
 
