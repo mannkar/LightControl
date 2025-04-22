@@ -96,9 +96,6 @@ class KNXDali extends IPSModule {
                 $inputTriggerOkCount2++;
             }
         }
-
-        
-
     }
 
 
@@ -183,11 +180,33 @@ class KNXDali extends IPSModule {
         //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message: ". $id);
         //$value = GetValueBoolean ($this -> ReadPropertyInteger("Trigger")); 
         $Level = $this -> TriggerStatus(); // off, low, high
-        $DayTime = $this -> TimeTableEvent ();
+        
 
         $Message = "";
-        IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message: ".$idDimm. " " . $Message.$Level);
-        IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message: ".$idDimm. " " . $Message.$DayTime);
+        //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message: ".$idDimm. " " . $Message.$Level);
+        
+                switch ($Level)
+        {
+            case "off":
+                //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with OFF Message: ".$idDimm. " " . $Message.$Level);
+                SetValueInteger ($idDimm, 0);
+                break;
+            
+            case "low":
+                $BaseLevel = $this -> CalculateDimmLevel();
+                //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level);
+                $Lower = $this -> ReadPropertyInteger("SecDimVal");
+                SetValueInteger ($idDimm, $BaseLevel/100*$Lower);
+                break;
+
+            case "high":
+                $BaseLevel = $this -> CalculateDimmLevel();
+                //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level);
+                SetValueInteger ($idDimm, $BaseLevel);
+                break;
+
+
+        }
         //SetValueBoolean($id , $value);
         
         }
@@ -219,6 +238,18 @@ class KNXDali extends IPSModule {
         }
         return $actionID;
         //var_dump($actionID);
+
+    }
+
+    public function CalculateDimmLevel()
+    {
+        $DayTime = $this -> TimeTableEvent () -1;
+        IPS_LogMessage("MessageSink", "DayTime Message: " . $DayTime);
+        $inputLevel = json_decode($this->ReadPropertyString('PrimDimVals'), true);
+        $BaseLevel = $inputLevel [$DayTime] ['SwitchValue'] ;
+        //IPS_LogMessage("MessageSink", "Message DImmlevel: " . $dump);
+        return $BaseLevel;
+
 
     }
  
