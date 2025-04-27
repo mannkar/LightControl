@@ -101,6 +101,7 @@ class KNXDali extends IPSModule {
 
     public function GetConfigurationForm()
     {
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         //Add options to form
 		//Optionen zum Formular hinzufügen
         $jsonForm = json_decode(file_get_contents(__DIR__ . '/form.json'), true);
@@ -130,6 +131,7 @@ class KNXDali extends IPSModule {
 
     private function GetTriggerStatus($triggerID)
     {
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         if (!IPS_VariableExists($triggerID)) {
             return 'Missing';
         } elseif (IPS_GetVariable($triggerID)['VariableType'] == VARIABLETYPE_STRING) {
@@ -152,12 +154,14 @@ class KNXDali extends IPSModule {
     {
         
         //Modul aktivieren
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         SetValue($this->GetIDForIdent('Active'), $Active);
         return true;
     }
 
     public function RequestAction($Ident, $Value)
     {
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         switch ($Ident) {
             case 'Active':
                 $this->SetActive($Value);
@@ -169,6 +173,7 @@ class KNXDali extends IPSModule {
     }
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data) {
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         if ($Message == VM_UPDATE) {
         //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message ".$Message."\r\n Data: ".print_r($Data, true));
         //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message ".$Message."\r\n Data: "."Los ->");
@@ -180,7 +185,6 @@ class KNXDali extends IPSModule {
         //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message: ". $id);
         //$value = GetValueBoolean ($this -> ReadPropertyInteger("Trigger")); 
         $Level = $this -> TriggerStatus(); // off, low, high
-        
 
         $Message = "";
         //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with Message: ".$idDimm. " " . $Message.$Level);
@@ -195,17 +199,25 @@ class KNXDali extends IPSModule {
             
             case "low":
                 $BaseLevel = $this -> CalculateDimmLevel();
-                IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level);
-                $Lower = $this -> ReadPropertyInteger("SecDimVal");
-                //SetValueInteger ($idDimm, $BaseLevel/100*$Lower);
-                RequestAction ($idDimm, $BaseLevel/100*$Lower);
+                if ($BaseLevel > 0)
+                    {
+                    //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level);
+                    $this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level, 0);
+                    $Lower = $this -> ReadPropertyInteger("SecDimVal");
+                    //SetValueInteger ($idDimm, $BaseLevel/100*$Lower);
+                    RequestAction ($idDimm, $BaseLevel/100*$Lower);
+                    }
                 break;
 
             case "high":
                 $BaseLevel = $this -> CalculateDimmLevel();
-                IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level);
-                //SetValueInteger ($idDimm, $BaseLevel);
-                RequestAction ($idDimm, $BaseLevel);
+                if ($BaseLevel > 0)
+                    {
+                    //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level);
+                    $this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level, 0);
+                    //SetValueInteger ($idDimm, $BaseLevel);
+                    RequestAction ($idDimm, $BaseLevel);
+                    }
                 break;
 
 
@@ -218,6 +230,7 @@ class KNXDali extends IPSModule {
     public function TimeTableEvent ()
     {
         //$this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         $TimeTable = $this -> ReadPropertyInteger ("WeeklyTimeTableEventID");
         $id = $TimeTable;
 
@@ -246,18 +259,23 @@ class KNXDali extends IPSModule {
 
     public function CalculateDimmLevel()
     {
-        $DayTime = $this -> TimeTableEvent () -1;
-        IPS_LogMessage("MessageSink", "DayTime Message: " . $DayTime);
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        $DayTime = $this -> TimeTableEvent () -1; //
+        //IPS_LogMessage("MessageSink", "DayTime Message: " . $DayTime);
+        $this->SendDebug(__FUNCTION__, "DayTime Message: " . $DayTime, 0);
         $inputLevel = json_decode($this->ReadPropertyString('PrimDimVals'), true);
         $BaseLevel = $inputLevel [$DayTime] ['SwitchValue'] ;
         //IPS_LogMessage("MessageSink", "Message DImmlevel: " . $dump);
+        $Lower = $this -> ReadPropertyInteger("SecDimVal");
+        //RequestAction ($idDimm, $BaseLevel/100*$Lower);
         return $BaseLevel;
 
 
     }
- 
+
     public function TriggerStatus ()
     {
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         $PrimTriggerStatus = 0;
         $SecTriggerStatus = 0;
         $SumTriggerStatus = 0;
