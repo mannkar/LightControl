@@ -30,6 +30,8 @@
             "Brightness Threshold ID":"Grenzwert Helligkeit ID",
 
             "Active": "Aktiv",
+            "Cleaning": "Reinigung",
+            "Nominal value": "Sollwert",
 
             "Dimm values": "Dimmwerte",
             "primary dimm values": "Primäre Dimmwerte",
@@ -37,6 +39,7 @@
             "switch name": "Schaltname",
             "switch value": "Schaltwert",
             "Secondary dim value [%]": "Sekundärer Schaltwert [%]",
+            "dim value for clening [%]": "Dimmwert für Hausputz [%]",
 
 
             "Show Configuration": "Zeige Konfiguration"
