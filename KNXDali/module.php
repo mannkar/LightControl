@@ -145,6 +145,7 @@ class KNXDali extends IPSModule {
     {
         //Modul aktivieren
         $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        $this->SendDebug(__FUNCTION__, "Message SetActive ".$Active, 0);
         SetValue($this->GetIDForIdent('Active'), $Active);
         return true;
     }
@@ -153,19 +154,37 @@ class KNXDali extends IPSModule {
     {
         //Reinigung aktivieren
         $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        //$this->SendDebug(__FUNCTION__, "Message from SetCleaning ".$Cleaning, 0);
         SetValue($this->GetIDForIdent('Cleaning'), $Cleaning);
+        if (!$Cleaning) //if cleaning gets deactivated, the nominal has to be determinned - Wenn die Reinigung deaktiviert wird, muss der Sollwert wieder ermittelt werden
+            {
+                $BaseLevel = $this -> CalculateDimmLevel();
+                SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);       
+            }
         return true;
     }
 
+    public function SetNominal( float $Nominal)
+        {
+            //Sollwert aktivieren
+            $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+            SetValue($this->GetIDForIdent('Nominal'), $Nominal);
+            return true;
+        }
+
     public function RequestAction($Ident, $Value)
     {
-        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'].'#1' ,0);
+        //$this->SendDebug(__FUNCTION__, "Message from Ident ".$Ident.'#2', 0);
         switch ($Ident) {
             case 'Active':
                 $this->SetActive($Value);
                 break;
             case 'Cleaning':
                 $this->SetCleaning($Value);
+                break;
+            case 'Nominal':
+                $this->SetNominal($Value);
                 break;
 
             default:
@@ -187,8 +206,11 @@ class KNXDali extends IPSModule {
 
             if ($Message == VM_UPDATE and $SenderID = $this->GetIDForIdent('Cleaning')) {
                  // $this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with Cleaning Message: ", 0);
-                 $BaseLevel = $this -> ReadPropertyInteger("CleanDimVal");
-                 SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);
+                 if (GetValue($this->GetIDForIDent('Cleaning'))== true)
+                 {
+                    $BaseLevel = $this -> ReadPropertyInteger("CleanDimVal");
+                    SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);
+                 }
             }
 
             if ($Message == VM_UPDATE) {
