@@ -180,6 +180,13 @@
                 "suffix": "%"
             }
         ]
+    },
+    {
+      "type":  "ExpansionPanel", "caption": "Emergency contact (optional)",
+      "items": [
+        {"type": "Label", "caption": "Define an emergency contact. The light is set to 100%/on immediately; the automatic is deactivated."},
+        {"type": "SelectVariable", "name": "EmergencyContactID", "validVariableTypes": [0, 1, 2], "caption": "Emergency contact ID"}
+      ]
     }
 ],
 "actions":

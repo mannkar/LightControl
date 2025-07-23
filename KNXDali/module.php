@@ -16,6 +16,7 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyString("PrimDimVals", '[]');
         $this->RegisterPropertyInteger("SecDimVal", 50);
         $this->RegisterPropertyInteger("CleanDimVal", 80);
+        $this->RegisterPropertyInteger("EmergencyContactID", 0);
 
         $this->RegisterVariableBoolean('Active', $this->Translate('Active'), '~Switch');
         $this->EnableAction('Active');
@@ -86,6 +87,10 @@ class KNXDali extends IPSModule {
                 $inputTriggerOkCount++;
             }
         }
+
+        if ($this->ReadPropertyInteger('EmergencyContactID') != 0)
+            { $this->RegisterReference($this->ReadPropertyInteger('EmergencyContactID'));
+              $this->RegisterMessage($this->ReadPropertyInteger('EmergencyContactID'), VM_UPDATE); }
 
         //Check status column for inputs - Statusspalte für Eingänge prüfen
         $inputTriggers2 = json_decode($this->ReadPropertyString('SecTriggers'), true);
@@ -193,7 +198,13 @@ class KNXDali extends IPSModule {
     }
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data) {
-        //$this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        if ($Message == VM_UPDATE and  $SenderID = $this->EmergencyContactID) {
+                $this->SendDebug(__FUNCTION__, "Message from Emergency Contact ID ".$SenderID, 0);    
+                RequestAction ($idDimm, 100);
+                $this->SetActive(false);
+                exit(0);
+            }
         if (GetValue($this->GetIDForIdent('Active')))
         {
             if ($Message == EM_UPDATE)
