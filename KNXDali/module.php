@@ -13,6 +13,7 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
         $this->RegisterPropertyInteger("HolidayIndicatorID",0);
         $this->RegisterPropertyInteger("DayUsedWhenHoliday",0);
+        $this->RegisterPropertyInteger("IsDayIndicatorID", 0);
         $this->RegisterPropertyString("PrimDimVals", '[]');
         $this->RegisterPropertyInteger("SecDimVal", 50);
         $this->RegisterPropertyInteger("CleanDimVal", 80);
@@ -69,6 +70,12 @@ class KNXDali extends IPSModule {
         if ($holidayIndicatorId != 0) {
             $this->RegisterReference($holidayIndicatorId);
             $this->RegisterMessage($holidayIndicatorId, VM_UPDATE);
+        }
+
+        $isDayIndicatorId = $this->ReadPropertyInteger('IsDayIndicatorID');
+        if ($isDayIndicatorId != 0) {
+            $this->RegisterReference($isDayIndicatorId);
+            $this->RegisterMessage($isDayIndicatorId, VM_UPDATE);
         }
         
         $this->RegisterMessage($this->GetIDForIdent('Cleaning'), VM_UPDATE);
@@ -214,6 +221,18 @@ class KNXDali extends IPSModule {
                 $this->SetActive(false);
             }
             return;
+        }
+
+        $isDayIndicatorId = $this->ReadPropertyInteger('IsDayIndicatorID');
+        if (($isDayIndicatorId > 0) && IPS_VariableExists($isDayIndicatorId)) {
+            if ((IPS_GetVariable($isDayIndicatorId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($isDayIndicatorId)) {
+                $this->SendDebug(__FUNCTION__, "IsDayIndicatorID active -> switching light off/blocking light on", 0);
+                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+                if ($idDimm > 0) {
+                    RequestAction($idDimm, 0);
+                }
+                return;
+            }
         }
         if (GetValue($this->GetIDForIdent('Active')))
         {

@@ -40,7 +40,9 @@
             "switch value": "Schaltwert",
             "Secondary dim value [%]": "Sekundärer Schaltwert [%]",
             "dim value for clening [%]": "Dimmwert für Hausputz [%]",
-
+            "Emergency contact (optional)": "Notfallkontakt (optional)",
+            "Emergency contact ID": "Notfallkontakt ID",
+            "Define an emergency contact. The light is set to 100%/on immediately; the automatic is deactivated.": "Definieren Sie einen Notfallkontakt. Das Licht wird sofort auf 100%/an gesetzt; die Automatik wird deaktiviert.",
 
             "Show Configuration": "Zeige Konfiguration"
         }
