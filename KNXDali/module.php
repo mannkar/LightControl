@@ -152,7 +152,7 @@ class KNXDali extends IPSModule {
     */
 
     
-    public function SetActive(bool $Active)
+    public function SetActive(bool $Active) // Modul aktivieren
     {
         //Modul aktivieren
         $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
