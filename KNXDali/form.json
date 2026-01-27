@@ -76,8 +76,7 @@
                     "type": "RowLayout", "items": [
                     {"type": "SelectVariable",
                     "name": "HolidayIndicatorID",
-                    "caption": "Holiday Indicator ID",
-                    "onChange": "IPS_RequestAction($id, 'HolidayIndicatorID', $HolidayIndicatorID);"},
+                    "caption": "Holiday Indicator ID"},
                     {
                       "type": "Select", "name": "DayUsedWhenHoliday", "caption": "Used Weekday when Holiday", "options": [
                       {"caption": "- not used -", "value": 0},
