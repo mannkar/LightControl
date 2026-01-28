@@ -37,7 +37,7 @@ Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der
 - Urlaubs- und Feiertagsberücksichtigung
 - Putzfunktion
 
-![PM](docs/PM.jpeg)
+![PM](docs/PM.jpg)
 Beispiel: Tagsüber soll die reguläre Dimmstärke eines Lichtpunktes 2% betragen. Für die sekundären Trigger ist ein Wert von 20% angegeben. Wird eine Bewegung innerhalb der sekundären Trigger von links oder rechts erkannt, wird der Lichtpunkt auf 20% von den 2% Sollwert gestellt. Das wären in diesem Fall 0,4% der Gesamtleuchtleistung. Da dies in der Regel kein einstellbarer Wert für den Dimmaktor ist, wird der reduzierte Wert immer aufgerundet, so dass dar Leuchtpunkt mit 1% angesteuert wird.
 Sobald ein primärer Trigger auslöst wird die Leuchte auf 2% gesetzt.
 
