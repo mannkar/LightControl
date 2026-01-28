@@ -100,7 +100,7 @@
                   {"type": "Label", "caption": "If no 'Is Day' indicator is set, the day is determined by the brightness:"},
                   {
                     "type": "RowLayout", "items": [
-                    {"type": "SelectVariable", "name": "BrightnessID", "caption": "Brightness ID", "onChange": "IPS_RequestAction($id,'BrightnessID',$BrightnessID);"},
+                    {"type": "SelectVariable", "name": "BrightnessID", "caption": "Brightness ID"},
                     {"type": "NumberSpinner", "name": "BrightnessAvgMinutes", "caption": "Average of the last minutes", "suffix": "Minutes", "minimum": 0},
                     {"type": "SelectVariable", "name": "BrightnessThresholdID", "caption": "Brightness Threshold ID"}
                   ]
@@ -186,7 +186,23 @@
         {"type": "Label", "caption": "Define an emergency contact. The light is set to 100%/on immediately; the automatic is deactivated."},
         {"type": "SelectVariable", "name": "EmergencyContactID", "validVariableTypes": [0, 1, 2], "caption": "Emergency contact ID"}
       ]
+    },
+    {
+      "type": "ExpansionPanel", "caption": "Party",
+      "items": [
+        {"type": "Label", "caption": "Define an party switch. The light is set to a predefined value for a predefined time."},
+        { "type": "SelectVariable", "name": "IsParty", "validVariableTypes": [0, 1, 2], "caption": "IsParty" },
+        { "type": "SelectVariable", "name": "PartyDuration", "validVariableTypes": [1, 2], "caption": "Duration" },
+        { "type": "NumberSpinner", "name": "PartyBrightness", "caption": "Brightness", "minimum": 0, "maximum": 100, "suffix": "%" }
+      ]
+    },
+    {
+      "type": "ExpansionPanel", "caption": "Alarm",
+      "items": [
+        { "type": "SelectVariable", "name": "IsAlarm", "validVariableTypes": [0, 1, 2], "caption": "Alarm" }
+      ]
     }
+
 ],
 "actions":
     [

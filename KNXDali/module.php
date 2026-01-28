@@ -14,6 +14,10 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyInteger("HolidayIndicatorID",0);
         $this->RegisterPropertyInteger("DayUsedWhenHoliday",0);
         $this->RegisterPropertyInteger("IsDayIndicatorID", 0);
+        $this->RegisterPropertyInteger("IsParty", 0);
+        $this->RegisterPropertyInteger("PartyDuration", 0);
+        $this->RegisterPropertyInteger("PartyBrightness", 0);
+        $this->RegisterPropertyInteger("IsAlarm", 0);
         $this->RegisterPropertyString("PrimDimVals", '[]');
         $this->RegisterPropertyInteger("SecDimVal", 50);
         $this->RegisterPropertyInteger("CleanDimVal", 80);
@@ -26,6 +30,8 @@ class KNXDali extends IPSModule {
         $this->RegisterVariableFloat('Nominal', $this->Translate('Nominal value'), '', 20);
         $this->EnableAction('Nominal');
         $this->SetValue("Nominal", 20);
+
+        $this->RegisterTimer('PartyTimer', 0, 'KNXDali_PartyTimer($_IPS["TARGET"]);');
 
     }
 
@@ -76,6 +82,12 @@ class KNXDali extends IPSModule {
         if ($isDayIndicatorId != 0) {
             $this->RegisterReference($isDayIndicatorId);
             $this->RegisterMessage($isDayIndicatorId, VM_UPDATE);
+        }
+
+        $alarmVarId = $this->ReadPropertyInteger('IsAlarm');
+        if ($alarmVarId != 0) {
+            $this->RegisterReference($alarmVarId);
+            $this->RegisterMessage($alarmVarId, VM_UPDATE);
         }
         
         $this->RegisterMessage($this->GetIDForIdent('Cleaning'), VM_UPDATE);
@@ -221,6 +233,18 @@ class KNXDali extends IPSModule {
                 $this->SetActive(false);
             }
             return;
+        }
+
+        $alarmVarId = $this->ReadPropertyInteger('IsAlarm');
+        if (($alarmVarId > 0) && IPS_VariableExists($alarmVarId)) {
+            if ((IPS_GetVariable($alarmVarId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($alarmVarId)) {
+                $this->SendDebug(__FUNCTION__, "IsAlarm active -> switching light off/blocking triggers", 0);
+                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+                if ($idDimm > 0) {
+                    RequestAction($idDimm, 0);
+                }
+                return;
+            }
         }
 
         $isDayIndicatorId = $this->ReadPropertyInteger('IsDayIndicatorID');

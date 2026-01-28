@@ -45,7 +45,7 @@ Die Idee dahinter ist, dass man nie einen komplett unbeleuchteten Bereich betret
 
 
 ## 2. Voraussetzungen
-IP Symcon 7.0 und später
+IP Symcon 8.0 und später
 Der Lichtpunkt muss einen an/aus Schalter haben (boolean)
 UND der Lichtpunkt muss ein Dimmobjekt haben (integer 0-100 % )
 Die Auslösenden Variablen (Präsenzmelder) sind vom typ boolean
