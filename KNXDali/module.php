@@ -16,7 +16,7 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyInteger("IsDayIndicatorID", 0);
         $this->RegisterPropertyInteger("IsParty", 0);
         $this->RegisterPropertyInteger("PartyDuration", 0);
-        $this->RegisterPropertyInteger("PartyBrightness", 0);
+        $this->RegisterPropertyInteger("PartyBrightness", 75);
         $this->RegisterPropertyInteger("IsAlarm", 0);
         $this->RegisterPropertyString("PrimDimVals", '[]');
         $this->RegisterPropertyInteger("SecDimVal", 50);
