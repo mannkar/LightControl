@@ -31,7 +31,7 @@ class KNXDali extends IPSModule {
         $this->EnableAction('Nominal');
         $this->SetValue("Nominal", 20);
 
-        $this->RegisterTimer('PartyTimer', 0, 'KNXDali_PartyTimer($_IPS["TARGET"]);');
+        $this->RegisterTimer('PartyTimer', 0, 'LCK_PartyTimer($_IPS["TARGET"]);');
 
     }
 
@@ -84,6 +84,12 @@ class KNXDali extends IPSModule {
             $this->RegisterMessage($isDayIndicatorId, VM_UPDATE);
         }
 
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        if ($partyVarId != 0) {
+            $this->RegisterReference($partyVarId);
+            $this->RegisterMessage($partyVarId, VM_UPDATE);
+        }
+        
         $alarmVarId = $this->ReadPropertyInteger('IsAlarm');
         if ($alarmVarId != 0) {
             $this->RegisterReference($alarmVarId);
@@ -247,6 +253,36 @@ class KNXDali extends IPSModule {
             }
         }
 
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        if (($Message == VM_UPDATE) && ($partyVarId > 0) && ($SenderID == $partyVarId)) {
+            if (IPS_VariableExists($partyVarId) && (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING)) {
+                if (GetValue($partyVarId)) {
+                    $brightness = $this->ReadPropertyInteger('PartyBrightness');
+                    SetValue($this->GetIDForIdent('Nominal'), $brightness);
+                    $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+                    if ($idDimm > 0) {
+                        RequestAction($idDimm, $brightness);
+                    }
+
+                    $durationMinutes = 0;
+                    $partyDurationId = $this->ReadPropertyInteger('PartyDuration');
+                    if ($partyDurationId > 0 && IPS_VariableExists($partyDurationId) &&
+                        (IPS_GetVariable($partyDurationId)['VariableType'] != VARIABLETYPE_STRING)) {
+                        $durationMinutes = (int) GetValue($partyDurationId);
+                    }
+                    if ($durationMinutes > 0) {
+                        $this->SetTimerInterval('PartyTimer', $durationMinutes * 60 * 60 * 1000);
+                    } else {
+                        $this->SetTimerInterval('PartyTimer', 0);
+                    }
+                } else {
+                    $this->SetTimerInterval('PartyTimer', 0);
+                    $baseLevel = $this->CalculateDimmLevel();
+                    SetValue($this->GetIDForIdent('Nominal'), $baseLevel);
+                }
+            }
+        }
+
         $isDayIndicatorId = $this->ReadPropertyInteger('IsDayIndicatorID');
         if (($isDayIndicatorId > 0) && IPS_VariableExists($isDayIndicatorId)) {
             if ((IPS_GetVariable($isDayIndicatorId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($isDayIndicatorId)) {
@@ -263,9 +299,12 @@ class KNXDali extends IPSModule {
             if ($Message == EM_UPDATE)
                 {
                     //$this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with Zeitupdate", 0);
-                    $BaseLevel = $this -> CalculateDimmLevel();
-                    //$this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with BaseLevel ".$BaseLevel, 0);
-                    SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);
+                    $partyVarId = $this->ReadPropertyInteger('IsParty');
+                    if (!($partyVarId > 0 && IPS_VariableExists($partyVarId) && (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($partyVarId))) {
+                        $BaseLevel = $this -> CalculateDimmLevel();
+                        //$this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with BaseLevel ".$BaseLevel, 0);
+                        SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);
+                    }
                 }
 
             $holidayIndicatorId = $this->ReadPropertyInteger('HolidayIndicatorID');
@@ -328,6 +367,16 @@ class KNXDali extends IPSModule {
                 }
         }
     }    
+
+    public function PartyTimer()
+    {
+        $this->SetTimerInterval('PartyTimer', 0);
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        if ($partyVarId > 0 && IPS_VariableExists($partyVarId) &&
+            (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING)) {
+            SetValue($partyVarId, false);
+        }
+    }
 
     public function TimeTableEvent ()
     {
