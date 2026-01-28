@@ -191,14 +191,15 @@
       "type": "ExpansionPanel", "caption": "Party",
       "items": [
         {"type": "Label", "caption": "Define an party switch. The light is set to a predefined value for a predefined time."},
-        { "type": "SelectVariable", "name": "IsParty", "validVariableTypes": [0, 1, 2], "caption": "IsParty" },
-        { "type": "SelectVariable", "name": "PartyDuration", "validVariableTypes": [1, 2], "caption": "Duration" },
+        { "type": "SelectVariable", "name": "IsParty", "validVariableTypes": [0, 1, 2], "caption": "Is Party?" },
+        { "type": "SelectVariable", "name": "PartyDuration", "validVariableTypes": [1, 2], "caption": "Duration from activation" },
         { "type": "NumberSpinner", "name": "PartyBrightness", "caption": "Brightness", "minimum": 0, "maximum": 100, "suffix": "%" }
       ]
     },
     {
       "type": "ExpansionPanel", "caption": "Alarm",
       "items": [
+        {"type": "Label", "caption": "Define an alarm switch. The light switched off, trigger will not activate it."},
         { "type": "SelectVariable", "name": "IsAlarm", "validVariableTypes": [0, 1, 2], "caption": "Alarm" }
       ]
     }

@@ -19,7 +19,7 @@ Steuert einen Lichtpunkt nach vorgegebenen Einstellungen.
 
 ## 1. Funktionsumfang
 
-Durch die Vewendung eines an KNX gekoppelten Dali Systems ergaben sich viele einzelnd zu steuernde, dimmbare Lichtpunkte. Da die grundsätzliche Steuerung durch Präsenzmelder (PM) realisiert werden sollte, standen dadurch vielfältige Möglichkeiten einer sehr feinen Ansteuerung der einzelnen Lichtpunkte zur Verfügung. Grundsätzlich sollte zwar soviel Logik wie Möglich in dem autarken KNX System implementiert werden, allerdings schien der Aufwand an Hardware (Logikmodule, Zeitschaltuhren,..) überprpportinal hoch.
+Durch die Vewendung eines an KNX gekoppelten Dali Systems ergaben sich viele einzelnd zu steuernde, dimmbare Lichtpunkte. Da die grundsätzliche Steuerung durch Präsenzmelder (PM) realisiert wurde, standen vielfältige Möglichkeiten einer sehr feinen Ansteuerung der einzelnen Lichtpunkte zur Verfügung. Grundsätzlich sollte zwar soviel Logik wie Möglich in dem autarken KNX System implementiert werden, allerdings schien der Aufwand an Hardware (Logikmodule, Zeitschaltuhren,..) überprpportinal hoch.
 
 Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der mit seinem BlindControl Modul nicht nur meine Anforderungen an eine Rolladensteuerung teilweise übertroffen hat, sondern mit dem Code seines Modules auch an vielen Stelle "Pate" stand da es etliche Überschneidungen in den Logikanforderungen gab.
 
@@ -34,8 +34,10 @@ Ein herzliches Dankeschön muss ich an dieser Stelle an @bumaas aussprechen, der
 - Aktionsschaltung von Tag auf Abend (IstTag)
 - Ein primärer Trigger dimmt die Lichtpunkte auf die zu dem Zeitpunkt definierte Dimmstufe
 - Ein sekundärer Trigger dimmt die Lichtpunkte auf einen reduzierten Wert der zu dem Zeipunkt geltenden Dimmstufe
-- Urlaubs- und Feiertagsberücksichtigung
+- Urlaubs- und Feiertagsberücksichtigung mit alternativem Wochentag ( z.B. Sonntag)
 - Putzfunktion
+- Notfallkontakt: In diesem Fall wird die Leuchte auf 100% gesetzt und die Lichtautomatik deaktiviert. Die Automatik muss manuell wieder aktiviert werden
+- Alarmkontakt: Die Lampe wird ausgeschaltet und nicht mehr über die Trigger an. Wenn der Alarmkontakt aus ist, läuft die Automatik weiter
 
 ![PM](docs/PM.jpg)
 Beispiel: Tagsüber soll die reguläre Dimmstärke eines Lichtpunktes 2% betragen. Für die sekundären Trigger ist ein Wert von 20% angegeben. Wird eine Bewegung innerhalb der sekundären Trigger von links oder rechts erkannt, wird der Lichtpunkt auf 20% von den 2% Sollwert gestellt. Das wären in diesem Fall 0,4% der Gesamtleuchtleistung. Da dies in der Regel kein einstellbarer Wert für den Dimmaktor ist, wird der reduzierte Wert immer aufgerundet, so dass dar Leuchtpunkt mit 1% angesteuert wird.
