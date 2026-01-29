@@ -196,7 +196,7 @@
             {"type": "Label", "caption": "Define an party switch. The light is set to a predefined value for a predefined time."},
             { "type": "SelectVariable", "name": "IsParty", "validVariableTypes": [0, 1, 2], "caption": "Is Party?" },
             { "type": "SelectVariable", "name": "PartyDuration", "validVariableTypes": [1, 2], "caption": "Duration from activation [h]" },
-            { "type": "NumberSpinner", "name": "PartyBrightness", "caption": "Brightness", "minimum": 0, "maximum": 100, "suffix": "%" }
+            { "type": "NumberSpinner", "name": "PartyBrightness", "caption": "Brightness", "minimum": 0, "maximum": 100, "suffix": "%", "value": 75 }
           ]
         },
         {

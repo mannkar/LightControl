@@ -283,17 +283,6 @@ class KNXDali extends IPSModule {
             }
         }
 
-        $isDayIndicatorId = $this->ReadPropertyInteger('IsDayIndicatorID');
-        if (($isDayIndicatorId > 0) && IPS_VariableExists($isDayIndicatorId)) {
-            if ((IPS_GetVariable($isDayIndicatorId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($isDayIndicatorId)) {
-                $this->SendDebug(__FUNCTION__, "IsDayIndicatorID active -> switching light off/blocking light on", 0);
-                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
-                if ($idDimm > 0) {
-                    RequestAction($idDimm, 0);
-                }
-                return;
-            }
-        }
         if (GetValue($this->GetIDForIdent('Active')))
         {
             if ($Message == EM_UPDATE)
@@ -372,9 +361,14 @@ class KNXDali extends IPSModule {
     {
         $this->SetTimerInterval('PartyTimer', 0);
         $partyVarId = $this->ReadPropertyInteger('IsParty');
-        if ($partyVarId > 0 && IPS_VariableExists($partyVarId) &&
-            (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING)) {
-            SetValue($partyVarId, false);
+        if ($partyVarId > 0 && IPS_VariableExists($partyVarId)) {
+            $varType = IPS_GetVariable($partyVarId)['VariableType'];
+            $this->SendDebug(__FUNCTION__, "PartyTimer -> set IsParty=false, varType=".$varType, 0);
+            if ($varType == VARIABLETYPE_BOOLEAN) {
+                SetValueBoolean($partyVarId, false);
+            } elseif ($varType != VARIABLETYPE_STRING) {
+                SetValue($partyVarId, 0);
+            }
         }
     }
 
