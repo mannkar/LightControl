@@ -13,9 +13,15 @@ class KNXDali extends IPSModule {
         $this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
         $this->RegisterPropertyInteger("HolidayIndicatorID",0);
         $this->RegisterPropertyInteger("DayUsedWhenHoliday",0);
+        $this->RegisterPropertyInteger("IsDayIndicatorID", 0);
+        $this->RegisterPropertyInteger("IsParty", 0);
+        $this->RegisterPropertyInteger("PartyDuration", 0);
+        $this->RegisterPropertyInteger("PartyBrightness", 75);
+        $this->RegisterPropertyInteger("IsAlarm", 0);
         $this->RegisterPropertyString("PrimDimVals", '[]');
         $this->RegisterPropertyInteger("SecDimVal", 50);
         $this->RegisterPropertyInteger("CleanDimVal", 80);
+        $this->RegisterPropertyInteger("EmergencyContactID", 0);
 
         $this->RegisterVariableBoolean('Active', $this->Translate('Active'), '~Switch');
         $this->EnableAction('Active');
@@ -24,6 +30,8 @@ class KNXDali extends IPSModule {
         $this->RegisterVariableFloat('Nominal', $this->Translate('Nominal value'), '', 20);
         $this->EnableAction('Nominal');
         $this->SetValue("Nominal", 20);
+
+        $this->RegisterTimer('PartyTimer', 0, 'LCK_PartyTimer($_IPS["TARGET"]);');
 
     }
 
@@ -63,6 +71,30 @@ class KNXDali extends IPSModule {
         if ($this->ReadPropertyInteger('WeeklyTimeTableEventID') != 0)
             { $this->RegisterReference($this->ReadPropertyInteger('WeeklyTimeTableEventID'));
               $this->RegisterMessage($this->ReadPropertyInteger('WeeklyTimeTableEventID'), EM_UPDATE); }
+
+        $holidayIndicatorId = $this->ReadPropertyInteger('HolidayIndicatorID');
+        if ($holidayIndicatorId != 0) {
+            $this->RegisterReference($holidayIndicatorId);
+            $this->RegisterMessage($holidayIndicatorId, VM_UPDATE);
+        }
+
+        $isDayIndicatorId = $this->ReadPropertyInteger('IsDayIndicatorID');
+        if ($isDayIndicatorId != 0) {
+            $this->RegisterReference($isDayIndicatorId);
+            $this->RegisterMessage($isDayIndicatorId, VM_UPDATE);
+        }
+
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        if ($partyVarId != 0) {
+            $this->RegisterReference($partyVarId);
+            $this->RegisterMessage($partyVarId, VM_UPDATE);
+        }
+        
+        $alarmVarId = $this->ReadPropertyInteger('IsAlarm');
+        if ($alarmVarId != 0) {
+            $this->RegisterReference($alarmVarId);
+            $this->RegisterMessage($alarmVarId, VM_UPDATE);
+        }
         
         $this->RegisterMessage($this->GetIDForIdent('Cleaning'), VM_UPDATE);
 
@@ -86,6 +118,10 @@ class KNXDali extends IPSModule {
                 $inputTriggerOkCount++;
             }
         }
+
+        if ($this->ReadPropertyInteger('EmergencyContactID') != 0)
+            { $this->RegisterReference($this->ReadPropertyInteger('EmergencyContactID'));
+              $this->RegisterMessage($this->ReadPropertyInteger('EmergencyContactID'), VM_UPDATE); }
 
         //Check status column for inputs - Statusspalte für Eingänge prüfen
         $inputTriggers2 = json_decode($this->ReadPropertyString('SecTriggers'), true);
@@ -141,7 +177,7 @@ class KNXDali extends IPSModule {
     */
 
     
-    public function SetActive(bool $Active)
+    public function SetActive(bool $Active) // Modul aktivieren
     {
         //Modul aktivieren
         $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
@@ -193,18 +229,81 @@ class KNXDali extends IPSModule {
     }
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data) {
-        //$this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        $emergencyContactId = $this->ReadPropertyInteger('EmergencyContactID');
+        if (($Message == VM_UPDATE) && ($emergencyContactId > 0) && ($SenderID == $emergencyContactId)) {
+            $this->SendDebug(__FUNCTION__, "Message from Emergency Contact ID ".$SenderID, 0);
+            if (GetValue($emergencyContactId)) {
+                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+                RequestAction($idDimm, 100);
+                $this->SetActive(false);
+            }
+            return;
+        }
+
+        $alarmVarId = $this->ReadPropertyInteger('IsAlarm');
+        if (($alarmVarId > 0) && IPS_VariableExists($alarmVarId)) {
+            if ((IPS_GetVariable($alarmVarId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($alarmVarId)) {
+                $this->SendDebug(__FUNCTION__, "IsAlarm active -> switching light off/blocking triggers", 0);
+                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+                if ($idDimm > 0) {
+                    RequestAction($idDimm, 0);
+                }
+                return;
+            }
+        }
+
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        if (($Message == VM_UPDATE) && ($partyVarId > 0) && ($SenderID == $partyVarId)) {
+            if (IPS_VariableExists($partyVarId) && (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING)) {
+                if (GetValue($partyVarId)) {
+                    $brightness = $this->ReadPropertyInteger('PartyBrightness');
+                    SetValue($this->GetIDForIdent('Nominal'), $brightness);
+                    $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+                    if ($idDimm > 0) {
+                        RequestAction($idDimm, $brightness);
+                    }
+
+                    $durationMinutes = 0;
+                    $partyDurationId = $this->ReadPropertyInteger('PartyDuration');
+                    if ($partyDurationId > 0 && IPS_VariableExists($partyDurationId) &&
+                        (IPS_GetVariable($partyDurationId)['VariableType'] != VARIABLETYPE_STRING)) {
+                        $durationMinutes = (int) GetValue($partyDurationId);
+                    }
+                    if ($durationMinutes > 0) {
+                        $this->SetTimerInterval('PartyTimer', $durationMinutes * 60 * 60 * 1000);
+                    } else {
+                        $this->SetTimerInterval('PartyTimer', 0);
+                    }
+                } else {
+                    $this->SetTimerInterval('PartyTimer', 0);
+                    $baseLevel = $this->CalculateDimmLevel();
+                    SetValue($this->GetIDForIdent('Nominal'), $baseLevel);
+                }
+            }
+        }
+
         if (GetValue($this->GetIDForIdent('Active')))
         {
             if ($Message == EM_UPDATE)
                 {
                     //$this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with Zeitupdate", 0);
-                    $BaseLevel = $this -> CalculateDimmLevel();
-                    //$this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with BaseLevel ".$BaseLevel, 0);
-                    SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);
+                    $partyVarId = $this->ReadPropertyInteger('IsParty');
+                    if (!($partyVarId > 0 && IPS_VariableExists($partyVarId) && (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($partyVarId))) {
+                        $BaseLevel = $this -> CalculateDimmLevel();
+                        //$this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with BaseLevel ".$BaseLevel, 0);
+                        SetValue($this->GetIDForIdent('Nominal'), $BaseLevel);
+                    }
                 }
 
-            if ($Message == VM_UPDATE and $SenderID = $this->GetIDForIdent('Cleaning')) {
+            $holidayIndicatorId = $this->ReadPropertyInteger('HolidayIndicatorID');
+            if (($Message == VM_UPDATE) && ($holidayIndicatorId > 0) && ($SenderID == $holidayIndicatorId)) {
+                $this->SendDebug(__FUNCTION__, "Holiday indicator updated, recalculating dim level", 0);
+                $baseLevel = $this->CalculateDimmLevel();
+                SetValue($this->GetIDForIdent('Nominal'), $baseLevel);
+            }
+
+            if (($Message == VM_UPDATE) && ($SenderID == $this->GetIDForIdent('Cleaning'))) {
                  // $this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with Cleaning Message: ", 0);
                  if (GetValue($this->GetIDForIDent('Cleaning'))== true)
                  {
@@ -258,6 +357,21 @@ class KNXDali extends IPSModule {
         }
     }    
 
+    public function PartyTimer()
+    {
+        $this->SetTimerInterval('PartyTimer', 0);
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        if ($partyVarId > 0 && IPS_VariableExists($partyVarId)) {
+            $varType = IPS_GetVariable($partyVarId)['VariableType'];
+            $this->SendDebug(__FUNCTION__, "PartyTimer -> set IsParty=false, varType=".$varType, 0);
+            if ($varType == VARIABLETYPE_BOOLEAN) {
+                SetValueBoolean($partyVarId, false);
+            } elseif ($varType != VARIABLETYPE_STRING) {
+                SetValue($partyVarId, 0);
+            }
+        }
+    }
+
     public function TimeTableEvent ()
     {
         //$this->RegisterPropertyInteger("WeeklyTimeTableEventID", 0);
@@ -265,13 +379,32 @@ class KNXDali extends IPSModule {
         $TimeTable = $this -> ReadPropertyInteger ("WeeklyTimeTableEventID");
         $id = $TimeTable;
 
+        $dayNumber = (int) date("N");
+        $this->SendDebug(__FUNCTION__, "Current weekday: " . $dayNumber, 0);
+
+        $holidayIndicatorId = $this->ReadPropertyInteger('HolidayIndicatorID');
+        if ($holidayIndicatorId > 0 && IPS_VariableExists($holidayIndicatorId)) {
+            if (IPS_GetVariable($holidayIndicatorId)['VariableType'] == VARIABLETYPE_STRING) {
+                $this->SendDebug(__FUNCTION__, "HolidayIndicatorID: Bool/Int/Float required", 0);
+                $holidayIndicatorId = 0;
+            }
+        }
+        if ($holidayIndicatorId > 0) {
+            $isHoliday = (bool) GetValue($holidayIndicatorId);
+            $holidayDay = $this->ReadPropertyInteger('DayUsedWhenHoliday');
+            if ($isHoliday && ($holidayDay >= 1) && ($holidayDay <= 7)) {
+                $dayNumber = $holidayDay;
+                $this->SendDebug(__FUNCTION__, "Holiday active, using weekday: " . $dayNumber, 0);
+            }
+        }
+
         $e = IPS_GetEvent($TimeTable);
         //var_dump($e);
         $actionID = false;
         //Loop through all groups
         foreach($e['ScheduleGroups'] as $g) {
             //Check if group todays current
-            if($g['Days'] & date("N") > 0) {
+            if (($g['Days'] & (1 << ($dayNumber - 1))) > 0) {
                 //Check for actual switchpoint. We us the property, that the switch points are always ascending sorted.
                 foreach($g['Points'] as $p) {
                     if(date("H") * 3600 + date("i") * 60 + date("s") >= $p['Start']['Hour'] * 3600 + $p['Start']['Minute'] * 60 + $p['Start']['Second']) {
@@ -291,15 +424,23 @@ class KNXDali extends IPSModule {
     public function CalculateDimmLevel()
     {
         //$this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
-        $DayTime = $this -> TimeTableEvent () -1; //
-        //IPS_LogMessage("MessageSink", "DayTime Message: " . $DayTime);
-        $this->SendDebug(__FUNCTION__, "DayTime Message: " . $DayTime, 0);
+        $dayTime = $this->TimeTableEvent();
+        if ($dayTime === false || $dayTime <= 0) {
+            return 0;
+        }
+
+        $dayIndex = $dayTime - 1;
+        //IPS_LogMessage("MessageSink", "DayTime Message: " . $dayIndex);
+        $this->SendDebug(__FUNCTION__, "DayTime Message: " . $dayIndex, 0);
         $inputLevel = json_decode($this->ReadPropertyString('PrimDimVals'), true);
-        $BaseLevel = $inputLevel [$DayTime] ['SwitchValue'] ;
+        if (!isset($inputLevel[$dayIndex]['SwitchValue'])) {
+            return 0;
+        }
+
+        $baseLevel = $inputLevel[$dayIndex]['SwitchValue'];
         //IPS_LogMessage("MessageSink", "Message DImmlevel: " . $dump);
-        $Lower = $this -> ReadPropertyInteger("SecDimVal");
-        //RequestAction ($idDimm, $BaseLevel/100*$Lower);
-        return $BaseLevel;
+        //RequestAction ($idDimm, $baseLevel/100*$Lower);
+        return $baseLevel;
 
 
     }
@@ -314,6 +455,9 @@ class KNXDali extends IPSModule {
         $inputTriggers = json_decode($this->ReadPropertyString('PrimTriggers'), true);
         foreach ($inputTriggers as $inputTrigger) {
                 $triggerID = $inputTrigger['PrimTriggerIDs'];
+                if (!IPS_VariableExists($triggerID)) {
+                    continue;
+                }
                 if (GetValue ($triggerID))
                 {   $PrimTriggerStatus = $PrimTriggerStatus +100 ; // this prerequisites, that a max of 99 secundary trigger exists
                 }
@@ -324,6 +468,9 @@ class KNXDali extends IPSModule {
         $inputTriggers = json_decode($this->ReadPropertyString('SecTriggers'), true);
         foreach ($inputTriggers as $inputTrigger) {
                 $triggerID = $inputTrigger['SecTriggerIDs'];
+                if (!IPS_VariableExists($triggerID)) {
+                    continue;
+                }
                 if (GetValue ($triggerID))
                 {  $SecTriggerStatus = $SecTriggerStatus +1 ;
                 }
