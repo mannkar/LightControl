@@ -131,6 +131,12 @@ class KNXDali extends IPSModule {
                 $inputTriggerOkCount2++;
             }
         }
+
+        $this->RegisterMessage(0, IPS_KERNELSTARTED);
+
+        if (IPS_GetKernelRunlevel() == KR_READY) {
+            $this->SynchronizeNominalAndLight();
+        }
     }
 
     public function GetConfigurationForm()
@@ -192,6 +198,63 @@ class KNXDali extends IPSModule {
 
         RequestAction($idDimm, $level);
         return true;
+    }
+
+    private function SynchronizeNominalAndLight()
+    {
+        $this->SendDebug(__FUNCTION__, 'Synchronizing nominal/light state', 0);
+
+        $nominal = (float) $this->CalculateDimmLevel();
+        $partyVarId = $this->ReadPropertyInteger('IsParty');
+        $isParty = false;
+        if (($partyVarId > 0) && IPS_VariableExists($partyVarId) && (IPS_GetVariable($partyVarId)['VariableType'] != VARIABLETYPE_STRING)) {
+            $isParty = (bool) GetValue($partyVarId);
+            if ($isParty) {
+                $nominal = (float) $this->ReadPropertyInteger('PartyBrightness');
+            }
+        }
+
+        if (!$isParty && GetValue($this->GetIDForIdent('Cleaning'))) {
+            $nominal = (float) $this->ReadPropertyInteger('CleanDimVal');
+        }
+
+        SetValue($this->GetIDForIdent('Nominal'), $nominal);
+
+        $emergencyContactId = $this->ReadPropertyInteger('EmergencyContactID');
+        if (($emergencyContactId > 0) && IPS_VariableExists($emergencyContactId) &&
+            (IPS_GetVariable($emergencyContactId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($emergencyContactId)) {
+            $this->WriteDimmValue(100);
+            $this->SetActive(false);
+            return;
+        }
+
+        $alarmVarId = $this->ReadPropertyInteger('IsAlarm');
+        if (($alarmVarId > 0) && IPS_VariableExists($alarmVarId) &&
+            (IPS_GetVariable($alarmVarId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($alarmVarId)) {
+            $this->WriteDimmValue(0);
+            return;
+        }
+
+        if (!GetValue($this->GetIDForIdent('Active'))) {
+            return;
+        }
+
+        switch ($this->TriggerStatus()) {
+            case 'off':
+                $this->WriteDimmValue(0);
+                return;
+            case 'low':
+                if ($nominal > 0) {
+                    $lower = $this->ReadPropertyInteger('SecDimVal');
+                    $this->WriteDimmValue($nominal / 100 * $lower, true);
+                }
+                return;
+            case 'high':
+                if ($nominal > 0) {
+                    $this->WriteDimmValue($nominal);
+                }
+                return;
+        }
     }
 
     /**
@@ -256,6 +319,12 @@ class KNXDali extends IPSModule {
 
     public function MessageSink($TimeStamp, $SenderID, $Message, $Data) {
         $this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
+        if (($SenderID == 0) && ($Message == IPS_KERNELSTARTED)) {
+            $this->SendDebug(__FUNCTION__, 'Kernel started, synchronizing instance state', 0);
+            $this->SynchronizeNominalAndLight();
+            return;
+        }
+
         $emergencyContactId = $this->ReadPropertyInteger('EmergencyContactID');
         if (($Message == VM_UPDATE) && ($emergencyContactId > 0) && ($SenderID == $emergencyContactId)) {
             $this->SendDebug(__FUNCTION__, "Message from Emergency Contact ID ".$SenderID, 0);
