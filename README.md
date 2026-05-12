@@ -1,6 +1,6 @@
 # Light Control
 
-Modul für Symcon ab Version 6.3.
+Modul für Symcon ab Version 9.0
 
 Steuert einen Lichtpunkt nach vorgegebenen Einstellungen.
 

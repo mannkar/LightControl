@@ -167,6 +167,32 @@ class KNXDali extends IPSModule {
             return 'OK';
         }
     }
+    private function WriteDimmValue(float $level, bool $roundUp = false)
+    {
+        $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
+        if (($idDimm <= 0) || !IPS_VariableExists($idDimm)) {
+            $this->SendDebug(__FUNCTION__, 'Invalid PointOfLightDimm ID: ' . $idDimm, 0);
+            return false;
+        }
+
+        $varType = IPS_GetVariable($idDimm)['VariableType'];
+        if (($varType != VARIABLETYPE_INTEGER) && ($varType != VARIABLETYPE_FLOAT)) {
+            $this->SendDebug(__FUNCTION__, 'PointOfLightDimm must be Integer/Float. VariableType=' . $varType, 0);
+            return false;
+        }
+
+        $level = max(0.0, min(100.0, $level));
+        if ($roundUp && ($level > 0)) {
+            $level = ceil($level);
+        }
+
+        if ($varType == VARIABLETYPE_INTEGER) {
+            $level = (int) round($level);
+        }
+
+        RequestAction($idDimm, $level);
+        return true;
+    }
 
     /**
     * Die folgenden Funktionen stehen automatisch zur Verfügung, wenn das Modul über die "Module Control" eingefügt wurden.
@@ -234,8 +260,7 @@ class KNXDali extends IPSModule {
         if (($Message == VM_UPDATE) && ($emergencyContactId > 0) && ($SenderID == $emergencyContactId)) {
             $this->SendDebug(__FUNCTION__, "Message from Emergency Contact ID ".$SenderID, 0);
             if (GetValue($emergencyContactId)) {
-                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
-                RequestAction($idDimm, 100);
+                $this->WriteDimmValue(100);
                 $this->SetActive(false);
             }
             return;
@@ -245,10 +270,7 @@ class KNXDali extends IPSModule {
         if (($alarmVarId > 0) && IPS_VariableExists($alarmVarId)) {
             if ((IPS_GetVariable($alarmVarId)['VariableType'] != VARIABLETYPE_STRING) && GetValue($alarmVarId)) {
                 $this->SendDebug(__FUNCTION__, "IsAlarm active -> switching light off/blocking triggers", 0);
-                $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
-                if ($idDimm > 0) {
-                    RequestAction($idDimm, 0);
-                }
+                $this->WriteDimmValue(0);
                 return;
             }
         }
@@ -259,10 +281,7 @@ class KNXDali extends IPSModule {
                 if (GetValue($partyVarId)) {
                     $brightness = $this->ReadPropertyInteger('PartyBrightness');
                     SetValue($this->GetIDForIdent('Nominal'), $brightness);
-                    $idDimm = $this->ReadPropertyInteger('PointOfLightDimm');
-                    if ($idDimm > 0) {
-                        RequestAction($idDimm, $brightness);
-                    }
+                    $this->WriteDimmValue($brightness);
 
                     $durationMinutes = 0;
                     $partyDurationId = $this->ReadPropertyInteger('PartyDuration');
@@ -327,7 +346,7 @@ class KNXDali extends IPSModule {
                 {
                     case "off":
                         //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with OFF Message: ".$idDimm. " " . $Message.$Level);
-                        RequestAction ($idDimm, 0);
+                        $this->WriteDimmValue(0);
                         break;
                     
                     case "low":
@@ -338,7 +357,7 @@ class KNXDali extends IPSModule {
                             $this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with LOW Message: ".$idDimm. " " . $Message.$Level, 0);
                             $Lower = $this -> ReadPropertyInteger("SecDimVal");
                             //SetValueInteger ($idDimm, $BaseLevel/100*$Lower);
-                            RequestAction ($idDimm, $BaseLevel/100*$Lower);
+                            $this->WriteDimmValue($BaseLevel / 100 * $Lower, true);
                             }
                         break;
                     case "high":
@@ -348,7 +367,7 @@ class KNXDali extends IPSModule {
                             //IPS_LogMessage("MessageSink", "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level);
                             $this->SendDebug(__FUNCTION__, "Message from SenderID ".$SenderID." with HIGH Message: ".$idDimm. " " . $Message.$Level, 0);
                             //SetValueInteger ($idDimm, $BaseLevel);
-                            RequestAction ($idDimm, $BaseLevel);
+                            $this->WriteDimmValue($BaseLevel);
                             }
                         break;
                     }
@@ -378,6 +397,16 @@ class KNXDali extends IPSModule {
         //$this->SendDebug(__FUNCTION__,$_IPS['SENDER'] ,0);
         $TimeTable = $this -> ReadPropertyInteger ("WeeklyTimeTableEventID");
         $id = $TimeTable;
+        if ($TimeTable <= 0) {
+            $this->SendDebug(__FUNCTION__, 'WeeklyTimeTableEventID is not configured', 0);
+            return false;
+        }
+
+        $e = @IPS_GetEvent($TimeTable);
+        if (!is_array($e) || !isset($e['ScheduleGroups'])) {
+            $this->SendDebug(__FUNCTION__, 'WeeklyTimeTableEventID does not point to a valid schedule event: ' . $TimeTable, 0);
+            return false;
+        }
 
         $dayNumber = (int) date("N");
         $this->SendDebug(__FUNCTION__, "Current weekday: " . $dayNumber, 0);
@@ -398,7 +427,6 @@ class KNXDali extends IPSModule {
             }
         }
 
-        $e = IPS_GetEvent($TimeTable);
         //var_dump($e);
         $actionID = false;
         //Loop through all groups
